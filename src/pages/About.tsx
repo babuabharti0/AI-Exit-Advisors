@@ -15,12 +15,12 @@ export default function About() {
         <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center">
           <Animated variant="fadeUp">
             <h1 className="text-5xl md:text-8xl font-display tracking-tighter mb-8 text-foreground drop-shadow-sm">
-              We Engineer <br /> Outlier Exits.
+              Sell Your <br /> Business.
             </h1>
           </Animated>
           <Animated variant="fadeUp" delay={0.1}>
             <p className="text-xl md:text-2xl text-muted font-light tracking-wide mb-12 max-w-2xl mx-auto">
-              We are a premier M&A advisory firm representing visionary founders, positioning tech-enabled businesses to capture maximum value at exit.
+              AI Exit Advisors helps business owners sell their companies by connecting them with qualified buyers and managing the deal process from start to finish.
             </p>
           </Animated>
         </div>
@@ -31,7 +31,7 @@ export default function About() {
         <div className="max-w-4xl mx-auto text-center">
           <Animated variant="fadeUp">
             <h2 className="text-3xl md:text-5xl font-display tracking-tighter mb-6">
-              "We don’t list businesses. We engineer exits."
+              "We don’t just list businesses. We sell them."
             </h2>
             <div className="text-xs uppercase tracking-widest text-muted font-mono">
               — The AI Exit Advisors Philosophy
@@ -104,13 +104,13 @@ export default function About() {
                   Why founders choose us over traditional brokers.
                 </h2>
                 <p className="text-lg text-muted font-light leading-relaxed mb-8">
-                  The gap between a good exit and a great exit is strategy. We don't just find buyers; we build competition, control the narrative, and aggressively negotiate terms.
+                  The difference between listing a business and selling it is execution. We source qualified buyers, manage the narrative, and close the deal.
                 </p>
               </Animated>
 
               <div className="flex flex-col gap-8">
                 {[
-                  { title: "Strategic Pre-Sale Positioning", text: "We identify and correct valuation suppressors months before going to market." },
+                  { title: "Pre-Sale Preparation", text: "We identify and correct issues months before going to market." },
                   { title: "Direct Access to Serious Buyers", text: "Direct lines to Private Equity, family offices, and strategic acquirers globally." },
                   { title: "Discrete & Confidential", text: "Zero public listings. Strict NDAs and targeted outreach to protect your brand." }
                 ].map((edge, i) => (
@@ -136,8 +136,8 @@ export default function About() {
                </Animated>
                <Animated variant="fadeUp" delay={0.2} className="p-8 border border-white/10 rounded-3xl bg-zinc-950 shadow-sm flex flex-col gap-4 translate-y-0 sm:translate-y-12">
                  <TrendingUp className="w-6 h-6 text-blue-400" />
-                 <h4 className="font-medium">Data-Driven Multiples</h4>
-                 <p className="text-sm text-muted">We leverage live market intelligence to justify and defend premium valuations.</p>
+                 <h4 className="font-medium">Data-Driven Pricing</h4>
+                 <p className="text-sm text-muted">We use real market data to justify and defend your company's value.</p>
                </Animated>
                <Animated variant="fadeUp" delay={0.3} className="p-8 border border-white/10 rounded-3xl bg-zinc-950 shadow-sm flex flex-col gap-4">
                  <Users className="w-6 h-6 text-amber-400" />
@@ -184,7 +184,7 @@ export default function About() {
                 
                 <div className="space-y-5 text-lg text-muted font-light leading-relaxed mb-8 max-w-2xl">
                   <p>
-                    Advises founders on exit strategy, valuation positioning, and buyer acquisition across SaaS, DTC, and service-based businesses. Founded AI Exit Advisors in 2026 to apply AI-driven systems to the M&A process. The firm focuses on increasing deal flow, improving buyer quality, and reducing time to close through structured, data-backed execution.
+                    Advises on selling businesses, buyer sourcing, and deal execution across SaaS, DTC, and service-based businesses. Founded AI Exit Advisors in 2026 to apply AI-driven systems to the business brokerage process. The firm focuses on increasing buyer flow, improving deal quality, and reducing time to close through structured, data-backed execution.
                   </p>
                   <p>
                     Background spans sales, operations, and business ownership across healthcare, SaaS, energy, and service industries. Includes experience in building and operating businesses, along with high-touch sales across outbound, paid acquisition, and enterprise deal cycles.

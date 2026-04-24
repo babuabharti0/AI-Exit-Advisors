@@ -13,7 +13,7 @@ export default function Contact() {
               Start Your Exit Process
             </h1>
             <p className="text-xl text-muted font-light tracking-wide max-w-2xl mx-auto mb-10">
-              Get a confidential, no-obligation valuation and speak directly with our advisory team.
+              Request a confidential business valuation and speak with an advisor.
             </p>
             <button 
               onClick={() => document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth" })}

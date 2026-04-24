@@ -95,21 +95,21 @@ export default function Home() {
           >
             <motion.div variants={fadeUp} className="mb-4 inline-block">
               <span className="px-3 py-1 rounded-full border border-white/10 text-xs font-mono uppercase tracking-widest text-muted">
-                Premium Brokerage
+                Main Street Brokerage
               </span>
             </motion.div>
             <motion.h1 
               variants={fadeUp}
               className="text-5xl md:text-7xl lg:text-[5.5rem] leading-[1] tracking-tighter font-display font-medium text-foreground mb-6"
             >
-              Know What Your <br className="hidden md:block" />
-              <span className="text-white/60">Business Is Worth.</span>
+              Sell Your Business <br className="hidden md:block" />
+              <span className="text-white/60">the Right Way.</span>
             </motion.h1>
             <motion.p 
               variants={fadeUp}
               className="text-lg md:text-2xl text-muted font-light tracking-wide mb-12 max-w-xl leading-relaxed"
             >
-              Data-driven valuation based on real market multiples. Expert-led exits.
+              Main Street business brokerage for owners selling between $100K and $10M.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-start gap-4">
               <Link to="/contact" className="w-full sm:w-auto px-10 py-5 bg-foreground text-background text-sm tracking-widest uppercase font-medium rounded-full transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center shadow-[0_8px_30px_-4px_rgba(255,255,255,0.08)] hover:shadow-[0_12px_40px_-4px_rgba(255,255,255,0.12)]">

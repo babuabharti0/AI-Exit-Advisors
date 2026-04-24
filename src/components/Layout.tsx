@@ -111,7 +111,7 @@ export default function Layout() {
                 />
               </Link>
               <p className="text-sm text-muted font-light max-w-xs leading-relaxed">
-                Strategic M&A advisory for founders seeking high-value exits.
+                Main Street Business Broker | $100K–$10M Transactions
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function Layout() {
             <div className="flex flex-col items-start md:items-end text-sm text-muted font-light gap-4 md:text-right">
               <div>
                 <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Email</span>
-                <a href="mailto:ceo@sbcai0.com" className="text-foreground hover:opacity-80 transition-opacity">ceo@sbcai0.com</a>
+                <a href="mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry" className="text-foreground hover:opacity-80 transition-opacity">info@aiexitadvisors.com</a>
               </div>
               <div>
                 <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Phone</span>

@@ -158,25 +158,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. As Featured In / Trust Strip */}
-      <section className="py-12 border-t border-white/5 relative z-10 bg-zinc-950/30 backdrop-blur-md overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative">
-          <p className="text-center text-[10px] uppercase font-mono tracking-[0.3em] text-muted mb-8">
-            Market Intelligence Featured In
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 text-muted">
-            <span className="font-sans text-xl md:text-2xl font-black tracking-tighter hover:text-white hover:opacity-100 transition-all duration-300 cursor-default">Bloomberg</span>
-            <span className="font-serif text-xl md:text-2xl font-bold italic tracking-wider hover:text-white hover:opacity-100 transition-all duration-300 cursor-default">Forbes</span>
-            <span className="font-serif text-lg md:text-xl font-bold uppercase tracking-widest hover:text-white hover:opacity-100 transition-all duration-300 cursor-default">The Wall Street Journal</span>
-            <span className="font-sans text-lg md:text-xl font-semibold uppercase tracking-wider hover:text-white hover:opacity-100 transition-all duration-300 cursor-default">Financial Times</span>
-            <span className="font-sans text-xl md:text-2xl font-black tracking-tighter hover:text-white hover:opacity-100 transition-all duration-300 cursor-default">TechCrunch</span>
-          </div>
-          
-          <div className="absolute left-0 top-0 bottom-0 w-12 md:w-24 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-12 md:w-24 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-        </div>
-      </section>
-
       <ValuationEngine />
 
       {/* 3. Trust Section */}
@@ -277,75 +258,6 @@ export default function Home() {
               >
                 <span className="text-xs font-mono uppercase tracking-widest text-muted mt-2">0{i + 1}</span>
                 <span className="text-2xl md:text-3xl font-display tracking-tight text-foreground">{point}</span>
-              </Animated>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Recent Exits */}
-      <section className="py-24 md:py-32 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="mb-16">
-            <Animated variant="fadeUp">
-              <h2 className="text-3xl md:text-5xl font-display tracking-tighter">
-                Recent Exits.
-              </h2>
-            </Animated>
-          </div>          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { 
-                t: "SaaS Enterprise", 
-                val: "$12M+", 
-                cat: "Tech / Software", 
-                img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" // Dashboard / Analytics 
-              },
-              { 
-                t: "DTC E-Commerce", 
-                val: "$8.5M", 
-                cat: "Logistics / Retail", 
-                img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" // Warehouse / Logistics 
-              },
-              { 
-                t: "Creative Agency", 
-                val: "$4.2M", 
-                cat: "Services", 
-                img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" // Office people working
-              },
-            ].map((deal, i) => (
-              <Animated 
-                key={i}
-                delay={i * 0.15}
-                variant="fadeUp"
-                className="relative overflow-hidden group border border-white/10 p-8 rounded-3xl bg-zinc-950 hover:border-white/30 transition-all hover:-translate-y-2 duration-500 min-h-[360px] flex flex-col justify-between shadow-2xl"
-              >
-                <div className="absolute inset-0 z-0 opacity-40 group-hover:opacity-50 transition-all duration-700 pointer-events-none">
-                  <img 
-                    src={deal.img}
-                    alt={deal.t}
-                    className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110 filter grayscale-[0.7] contrast-[1.1] brightness-[0.9] mix-blend-luminosity"
-                    referrerPolicy="no-referrer"
-                  />
-                  {/* Cinematic Grain */}
-                  <div 
-                    className="absolute inset-0 mix-blend-overlay opacity-30" 
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-                  />
-                  {/* Vignette Edge Darkening */}
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(9,9,11,0.9)_100%)]" />
-                  
-                  {/* Readability Gradients */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-
-                <div className="relative z-10 text-[10px] font-mono tracking-widest text-emerald-400/80 border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 rounded-full uppercase inline-table w-max mb-12 shadow-sm">
-                  Closed / {deal.cat}
-                </div>
-                <div className="relative z-10 mt-auto transform transition-transform duration-500 group-hover:translate-y-[-8px]">
-                  <div className="text-3xl font-display tracking-tighter mb-2 text-white">{deal.t}</div>
-                  <div className="text-xl font-mono text-white/80">{deal.val}</div>
-                </div>
               </Animated>
             ))}
           </div>

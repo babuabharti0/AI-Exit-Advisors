@@ -37,7 +37,7 @@ export default function Contact() {
             </div>
             <div className="flex flex-col items-center p-10 bg-white/[0.03] backdrop-blur-[20px] rounded-3xl border border-white/10 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-out hover:-translate-y-1">
               <div className="text-xs font-mono uppercase tracking-widest text-muted mb-4 opacity-70">Email</div>
-              <a href="mailto:ceo@sbcai0.com" className="text-lg text-foreground font-light hover:opacity-70 transition-opacity">ceo@sbcai0.com</a>
+              <a href="mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry" className="text-lg text-foreground font-light hover:opacity-70 transition-opacity">info@aiexitadvisors.com</a>
             </div>
           </div>
         </Animated>

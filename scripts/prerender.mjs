@@ -648,7 +648,7 @@ function About() {
         /* @__PURE__ */ jsx7("div", { className: "aspect-[4/5] relative z-10 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.03)] text-transparent rounded-xl", children: /* @__PURE__ */ jsx7(
           "img",
           {
-            src: ownerImg,
+            src: "/images/john.webp",
             alt: "Principal Advisor",
             className: "w-full h-full object-cover rounded-xl shadow-lg",
             loading: "lazy",
@@ -693,7 +693,7 @@ function About() {
           /* @__PURE__ */ jsx7(
             "img",
             {
-              src: certImg,
+              src: "/images/certificate.webp",
               alt: "Business Broker Certification",
               className: "w-28 h-28 object-contain rounded-lg bg-white p-1.5 shrink-0 border border-black/5",
               loading: "lazy",
@@ -754,12 +754,9 @@ function About() {
     ] })
   ] });
 }
-var ownerImg, certImg;
 var init_About = __esm({
   "src/pages/About.tsx"() {
     init_Animated();
-    ownerImg = "/images/john.webp";
-    certImg = "/images/certificate.webp";
   }
 });
 
@@ -898,7 +895,6 @@ function cn(...inputs) {
 
 // src/components/Layout.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
-var logo = "/images/logo.webp";
 function Layout() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -916,7 +912,7 @@ function Layout() {
       /* @__PURE__ */ jsx(Link, { to: "/", className: "relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0", children: /* @__PURE__ */ jsx(
         "img",
         {
-          src: logo,
+          src: "/images/logo.webp",
           alt: "AI Exit Advisors",
           className: "h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md",
           width: 250,
@@ -968,7 +964,7 @@ function Layout() {
           /* @__PURE__ */ jsx(Link, { to: "/", className: "mb-6 hover:opacity-80 transition-opacity inline-block", children: /* @__PURE__ */ jsx(
             "img",
             {
-              src: logo,
+              src: "/images/logo.webp",
               alt: "AI Exit Advisors",
               className: "h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md",
               width: 150,

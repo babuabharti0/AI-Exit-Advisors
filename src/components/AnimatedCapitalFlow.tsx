@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 export default function AnimatedCapitalFlow() {
+  const isMobile = useIsMobile();
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
       {/* Base Solid Background */}
@@ -11,7 +13,7 @@ export default function AnimatedCapitalFlow() {
         
         {/* Glow Layer (Blurry) */}
         <motion.div
-           animate={{ x: ["0%", "-50%"] }}
+           animate={{ x: isMobile ? "0%" : ["0%", "-50%"] }}
            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
            className="absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex blur-[10px]"
         >
@@ -29,7 +31,7 @@ export default function AnimatedCapitalFlow() {
 
         {/* Sharp Focus Lines Layer */}
         <motion.div
-           animate={{ x: ["0%", "-50%"] }}
+           animate={{ x: isMobile ? "0%" : ["0%", "-50%"] }}
            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
            className="absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex opacity-[0.85]"
         >

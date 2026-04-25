@@ -1,8 +1,8 @@
 import Animated from "../components/Animated";
 import { Link } from "react-router-dom";
 import { TrendingUp, Users, Shield, Target, Building2, BarChart3, Fingerprint, Lock, CheckCircle2, Award } from "lucide-react";
-const ownerImg = "/images/john.png";
-const certImg = "/images/certificate.png";
+const ownerImg = "/images/john.webp";
+const certImg = "/images/certificate.webp";
 
 export default function About() {
   return (
@@ -167,6 +167,9 @@ export default function About() {
                     src={ownerImg} 
                     alt="Principal Advisor" 
                     className="w-full h-full object-cover rounded-xl shadow-lg"
+                    loading="lazy"
+                    width={400}
+                    height={500}
                   />
                 </div>
                 {/* Decoration */}
@@ -224,6 +227,9 @@ export default function About() {
                     src={certImg}
                     alt="Business Broker Certification"
                     className="w-28 h-28 object-contain rounded-lg bg-white p-1.5 shrink-0 border border-black/5"
+                    loading="lazy"
+                    width={112}
+                    height={112}
                   />
                   <div>
                     <div className="text-xs font-mono uppercase tracking-widest text-muted mb-1">Certification</div>

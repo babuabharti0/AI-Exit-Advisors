@@ -26,7 +26,7 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10">
           <Link to="/" className="relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0">
             <img 
-              src="/images/logo.webp" 
+              src="https://aiexitadvisors.com/images/logo.webp" 
               alt="AI Exit Advisors" 
               className="h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md"
               width={250}
@@ -107,7 +107,7 @@ export default function Layout() {
             <div className="flex flex-col items-start text-left">
               <Link to="/" className="mb-6 hover:opacity-80 transition-opacity inline-block">
                 <img 
-                  src="/images/logo.webp" 
+                  src="https://aiexitadvisors.com/images/logo.webp" 
                   alt="AI Exit Advisors" 
                   className="h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md"
                   width={150}

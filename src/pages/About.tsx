@@ -1,6 +1,9 @@
 import Animated from "../components/Animated";
 import { Link } from "react-router-dom";
 import { TrendingUp, Users, Shield, Target, Building2, BarChart3, Fingerprint, Lock, CheckCircle2, Award } from "lucide-react";
+const ownerImg = "/images/john.png";
+const certImg = "/images/certificate.png";
+
 export default function About() {
   return (
     <div className="w-full flex-1">
@@ -161,12 +164,9 @@ export default function About() {
               <div className="relative w-full max-w-[400px]">
                 <div className="aspect-[4/5] relative z-10 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.03)] text-transparent rounded-xl">
                   <img 
-                    src="https://aiexitadvisors.com/images/john.webp" 
+                    src={ownerImg} 
                     alt="Principal Advisor" 
                     className="w-full h-full object-cover rounded-xl shadow-lg"
-                    loading="lazy"
-                    width={400}
-                    height={500}
                   />
                 </div>
                 {/* Decoration */}
@@ -221,12 +221,9 @@ export default function About() {
               <Animated variant="fadeUp" delay={0.2}>
                 <div className="flex items-center gap-6 p-5 border border-white/10 rounded-2xl bg-zinc-900 inline-flex shadow-sm">
                   <img 
-                    src="https://aiexitadvisors.com/images/certificate.webp"
+                    src={certImg}
                     alt="Business Broker Certification"
                     className="w-28 h-28 object-contain rounded-lg bg-white p-1.5 shrink-0 border border-black/5"
-                    loading="lazy"
-                    width={112}
-                    height={112}
                   />
                   <div>
                     <div className="text-xs font-mono uppercase tracking-widest text-muted mb-1">Certification</div>

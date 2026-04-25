@@ -2,10 +2,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AnimatedDataFlow from "./AnimatedDataFlow";
-import { useIsMobile } from "../hooks/useIsMobile";
 
 export default function ValuationEngine() {
-  const isMobile = useIsMobile();
   const [step, setStep] = useState(1);
   
   const [revenue, setRevenue] = useState("");
@@ -79,7 +77,7 @@ export default function ValuationEngine() {
               Get a realistic valuation in minutes — before you leave money on the table.
             </p>
             <div className="flex items-center justify-center gap-3 text-xs uppercase tracking-widest text-foreground/80 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full w-max mx-auto">
-              <span className={`w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-80 ${isMobile ? '' : 'animate-pulse'}`} />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-80 animate-pulse" />
               Serious buyers are actively acquiring right now.
             </div>
           </motion.div>
@@ -92,9 +90,6 @@ export default function ValuationEngine() {
               alt="Texture" 
               className="w-full h-full object-cover mix-blend-overlay filter contrast-150 grayscale invert-0"
               referrerPolicy="no-referrer"
-              width={1200}
-              height={800}
-              loading="lazy"
             />
           </div>
           <div className="absolute top-0 left-0 w-full h-1 bg-white/5 z-10">

@@ -1,8 +1,6 @@
 import { motion } from "motion/react";
-import { useIsMobile } from "../hooks/useIsMobile";
 
 export default function AnimatedDataFlow() {
-  const isMobile = useIsMobile();
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
       {/* Base colors bridging light and dark mode */}
@@ -10,7 +8,7 @@ export default function AnimatedDataFlow() {
 
       {/* Abstract Glowing Orbs (Slightly more visible) */}
       <motion.div
-        animate={isMobile ? { scale: 1, opacity: 0.4, x: "0%", y: "0%" } : {
+        animate={{
           scale: [1, 1.1, 1],
           opacity: [0.4, 0.6, 0.4],
           x: ["0%", "2%", "0%"],
@@ -20,7 +18,7 @@ export default function AnimatedDataFlow() {
         className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full blur-[100px] mix-blend-screen bg-amber-600/15"
       />
       <motion.div
-        animate={isMobile ? { scale: 1, opacity: 0.3, x: "0%", y: "0%" } : {
+        animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
           x: ["0%", "-3%", "0%"],
@@ -33,7 +31,7 @@ export default function AnimatedDataFlow() {
       {/* Repeating Data Lines Container */}
       <div className="absolute inset-0 w-full h-full opacity-25 blur-xl pointer-events-none">
         <motion.div
-          animate={isMobile ? { x: "0%" } : { x: ["0%", "-50%"] }}
+          animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           className="absolute inset-0 w-[200%] h-full flex"
         >
@@ -55,7 +53,7 @@ export default function AnimatedDataFlow() {
       </div>
 
       <motion.div
-        animate={isMobile ? { x: "0%" } : { x: ["0%", "-50%"] }}
+        animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         className="absolute inset-0 w-[200%] h-full flex opacity-60"
       >
@@ -68,37 +66,33 @@ export default function AnimatedDataFlow() {
            <path d="M0,500 C150,450 250,550 500,500 C750,450 850,550 1000,500" className="stroke-amber-300/25" strokeWidth="2" vectorEffect="non-scaling-stroke" />
            
            {/* Moving Highlight Pulses */}
-           {isMobile ? null : (
-             <>
-               <motion.path 
-                 d="M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400" 
-                 className="stroke-amber-200" 
-                 strokeWidth="2" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="100 900"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-               />
-               <motion.path 
-                 d="M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600" 
-                 className="stroke-amber-100" 
-                 strokeWidth="1.5" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="50 950"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }}
-               />
-               <motion.path 
-                 d="M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200" 
-                 className="stroke-amber-300" 
-                 strokeWidth="3" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="150 850"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 6, repeat: Infinity, ease: "linear", delay: 2 }}
-               />
-             </>
-           )}
+           <motion.path 
+             d="M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400" 
+             className="stroke-amber-200" 
+             strokeWidth="2" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="100 900"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+           />
+           <motion.path 
+             d="M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600" 
+             className="stroke-amber-100" 
+             strokeWidth="1.5" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="50 950"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }}
+           />
+           <motion.path 
+             d="M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200" 
+             className="stroke-amber-300" 
+             strokeWidth="3" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="150 850"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 6, repeat: Infinity, ease: "linear", delay: 2 }}
+           />
         </svg>
         <svg fill="none" className="w-[50%] h-full" preserveAspectRatio="none" viewBox="0 0 1000 1000">
            {/* Static Base Lines Duplicate */}
@@ -109,37 +103,33 @@ export default function AnimatedDataFlow() {
            <path d="M0,500 C150,450 250,550 500,500 C750,450 850,550 1000,500" className="stroke-amber-300/25" strokeWidth="2" vectorEffect="non-scaling-stroke" />
            
            {/* Moving Highlight Pulses Duplicate */}
-           {isMobile ? null : (
-             <>
-               <motion.path 
-                 d="M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400" 
-                 className="stroke-amber-200" 
-                 strokeWidth="2" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="100 900"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-               />
-               <motion.path 
-                 d="M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600" 
-                 className="stroke-amber-100" 
-                 strokeWidth="1.5" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="50 950"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }}
-               />
-               <motion.path 
-                 d="M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200" 
-                 className="stroke-amber-300" 
-                 strokeWidth="3" 
-                 vectorEffect="non-scaling-stroke"
-                 strokeDasharray="150 850"
-                 animate={{ strokeDashoffset: [1000, 0] }}
-                 transition={{ duration: 6, repeat: Infinity, ease: "linear", delay: 2 }}
-               />
-             </>
-           )}
+           <motion.path 
+             d="M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400" 
+             className="stroke-amber-200" 
+             strokeWidth="2" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="100 900"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+           />
+           <motion.path 
+             d="M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600" 
+             className="stroke-amber-100" 
+             strokeWidth="1.5" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="50 950"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 1 }}
+           />
+           <motion.path 
+             d="M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200" 
+             className="stroke-amber-300" 
+             strokeWidth="3" 
+             vectorEffect="non-scaling-stroke"
+             strokeDasharray="150 850"
+             animate={{ strokeDashoffset: [1000, 0] }}
+             transition={{ duration: 6, repeat: Infinity, ease: "linear", delay: 2 }}
+           />
         </svg>
       </motion.div>
 

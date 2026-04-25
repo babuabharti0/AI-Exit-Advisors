@@ -5,7 +5,11 @@ import { useRef } from "react";
 import ValuationEngine from "../components/ValuationEngine";
 import Animated from "../components/Animated";
 import AnimatedCapitalFlow from "../components/AnimatedCapitalFlow";
-import { useIsMobile } from "../hooks/useIsMobile";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+};
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -18,22 +22,16 @@ const staggerContainer = {
 };
 
 export default function Home() {
-  const isMobile = useIsMobile();
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
   
-  const yHero = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 200]);
-  const opacityHero = useTransform(scrollYProgress, [0, 0.5], [1, isMobile ? 1 : 0]);
-  const yBgTexture = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 100]);
-  const yBgGrid = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : -80]);
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: isMobile ? 0 : 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: isMobile ? 0.4 : 0.8, ease: [0.16, 1, 0.3, 1] } }
-  };
+  const yHero = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacityHero = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const yBgTexture = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const yBgGrid = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
     <div ref={containerRef} className="w-full flex-col flex bg-background">
@@ -46,9 +44,6 @@ export default function Home() {
             alt="Corporate Acquisition Meeting" 
             className="w-full h-full object-cover opacity-20 filter contrast-125 brightness-50 mix-blend-luminosity blur-[2px]"
             referrerPolicy="no-referrer"
-            width={2560}
-            height={1440}
-            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/40" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
@@ -69,9 +64,6 @@ export default function Home() {
               alt=""
               className="w-full h-[150%] object-cover scale-110 grayscale"
               referrerPolicy="no-referrer"
-              width={1200}
-              height={800}
-              loading="lazy"
             />
           </motion.div>
 
@@ -128,18 +120,15 @@ export default function Home() {
 
           {/* Right Visual Panel */}
           <motion.div 
-            initial={isMobile ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={isMobile ? { duration: 0 } : { duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="hidden lg:flex relative h-[600px] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]"
           >
             <img 
               src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80" 
               alt="Data and Strategy" 
               className="w-full h-full object-cover filter contrast-[1.1] brightness-[0.6] mix-blend-luminosity scale-105"
-              width={1200}
-              height={800}
-              loading="lazy"
             />
             {/* Visual Panel Overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent opacity-90" />
@@ -158,7 +147,7 @@ export default function Home() {
               </div>
               <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                  <motion.div 
-                   initial={{ width: isMobile ? "75%" : "0%" }}
+                   initial={{ width: "0%" }}
                    animate={{ width: "75%" }}
                    transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
                    className="h-full bg-white opacity-80" 
@@ -263,9 +252,6 @@ export default function Home() {
             alt="Corporate Desk" 
             className="w-full h-full object-cover filter contrast-125 brightness-50 grayscale mix-blend-luminosity"
             referrerPolicy="no-referrer"
-            width={2560}
-            height={1440}
-            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
         </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import SmoothScroll from "./SmoothScroll";
 import { cn } from "../lib/utils";
+const logo = "/images/logo.png";
 
 export default function Layout() {
   const location = useLocation();
@@ -26,12 +27,9 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10">
           <Link to="/" className="relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0">
             <img 
-              src="https://aiexitadvisors.com/images/logo.webp" 
+              src={logo} 
               alt="AI Exit Advisors" 
               className="h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md"
-              width={250}
-              height={64}
-              loading="lazy"
             />
           </Link>
           
@@ -107,12 +105,9 @@ export default function Layout() {
             <div className="flex flex-col items-start text-left">
               <Link to="/" className="mb-6 hover:opacity-80 transition-opacity inline-block">
                 <img 
-                  src="https://aiexitadvisors.com/images/logo.webp" 
+                  src={logo} 
                   alt="AI Exit Advisors" 
                   className="h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md"
-                  width={150}
-                  height={40}
-                  loading="lazy"
                 />
               </Link>
               <p className="text-sm text-muted font-light max-w-xs leading-relaxed">

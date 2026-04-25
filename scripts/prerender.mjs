@@ -1,45 +1,173 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
+// scripts/prerender.ts
+import fs from "node:fs/promises";
+import path from "node:path";
+import React from "react";
+import { renderToString } from "react-dom/server";
 
-// src/hooks/useIsMobile.ts
-import { useState as useState2, useEffect as useEffect3 } from "react";
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState2(
-    typeof window !== "undefined" ? window.innerWidth < breakpoint : false
-  );
-  useEffect3(() => {
-    if (typeof window === "undefined") return;
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
+// src/App.tsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { StaticRouter } from "react-router";
+
+// src/components/Layout.tsx
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useEffect as useEffect2, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+
+// src/components/SmoothScroll.tsx
+import Lenis from "@studio-freight/lenis";
+import { useEffect } from "react";
+function SmoothScroll() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.08,
+      // low lerp for smooth but responsive feel
+      smoothWheel: true,
+      wheelMultiplier: 1
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    return () => {
+      lenis.destroy();
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
-  return isMobile;
+  }, []);
+  return null;
 }
-var init_useIsMobile = __esm({
-  "src/hooks/useIsMobile.ts"() {
-  }
-});
+
+// src/lib/utils.ts
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+// src/components/Layout.tsx
+import { jsx, jsxs } from "react/jsx-runtime";
+var logo = "/images/logo.png";
+function Layout() {
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  useEffect2(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden", children: [
+    /* @__PURE__ */ jsxs("div", { className: "pointer-events-none fixed inset-0 z-0 overflow-hidden", children: [
+      /* @__PURE__ */ jsx("div", { className: "absolute top-[-10%] sm:top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-amber-500/5 blur-[100px] md:blur-[150px]" }),
+      /* @__PURE__ */ jsx("div", { className: "absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/5 blur-[100px] md:blur-[150px]" })
+    ] }),
+    /* @__PURE__ */ jsx(SmoothScroll, {}),
+    /* @__PURE__ */ jsx("header", { className: "fixed top-0 left-0 right-0 z-50 px-6 py-7 md:py-8 transition-all duration-300 bg-white/[0.04] backdrop-blur-[20px] border-b border-white/10", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10", children: [
+      /* @__PURE__ */ jsx(Link, { to: "/", className: "relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0", children: /* @__PURE__ */ jsx(
+        "img",
+        {
+          src: logo,
+          alt: "AI Exit Advisors",
+          className: "h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md"
+        }
+      ) }),
+      /* @__PURE__ */ jsxs("nav", { className: "hidden md:flex items-center gap-6 lg:gap-8 text-[11px] lg:text-xs uppercase tracking-widest font-medium", children: [
+        /* @__PURE__ */ jsx(Link, { to: "/", className: cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Home" }),
+        /* @__PURE__ */ jsx(Link, { to: "/about", className: cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground"), children: "About" }),
+        /* @__PURE__ */ jsx(Link, { to: "/contact", className: cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Contact" }),
+        /* @__PURE__ */ jsx(Link, { to: "/contact", className: "ml-2 px-8 py-3.5 bg-foreground text-background rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out shadow-[0_4px_20px_-4px_rgba(255,255,255,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(255,255,255,0.1)]", children: "Get Valuation" })
+      ] }),
+      /* @__PURE__ */ jsxs(
+        "button",
+        {
+          onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen),
+          className: "w-10 h-10 flex flex-col justify-center items-end gap-[5px] md:hidden relative z-50 p-2",
+          "aria-label": "Toggle Navigation",
+          children: [
+            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "rotate-45 translate-y-[6px]" : "") }),
+            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block transition-all duration-300", isMobileMenuOpen ? "opacity-0 translate-x-2" : "") }),
+            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "-rotate-45 -translate-y-[6px]" : "") })
+          ]
+        }
+      )
+    ] }) }),
+    /* @__PURE__ */ jsx(AnimatePresence, { children: isMobileMenuOpen && /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        initial: { opacity: 0, y: -20 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -20 },
+        transition: { duration: 0.2 },
+        className: "fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl flex flex-col items-center justify-center md:hidden",
+        children: /* @__PURE__ */ jsxs("nav", { className: "flex flex-col items-center justify-center gap-8 text-sm uppercase tracking-widest font-medium w-full px-6", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Home" }),
+          /* @__PURE__ */ jsx(Link, { to: "/about", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground"), children: "About" }),
+          /* @__PURE__ */ jsx(Link, { to: "/contact", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Contact" }),
+          /* @__PURE__ */ jsx("div", { className: "w-8 h-px bg-white/10 my-2" }),
+          /* @__PURE__ */ jsx(Link, { to: "/contact", onClick: () => setIsMobileMenuOpen(false), className: "px-10 py-4 bg-foreground text-background text-center rounded-full hover:opacity-90 active:scale-95 transition-all w-full max-w-[280px]", children: "Get Valuation" })
+        ] })
+      }
+    ) }),
+    /* @__PURE__ */ jsx("main", { className: "flex-1 flex flex-col pt-24", children: /* @__PURE__ */ jsx(Outlet, {}) }),
+    /* @__PURE__ */ jsx("footer", { className: "border-t border-white/5 bg-zinc-950 px-6 pt-20 pb-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto", children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start text-left", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/", className: "mb-6 hover:opacity-80 transition-opacity inline-block", children: /* @__PURE__ */ jsx(
+            "img",
+            {
+              src: logo,
+              alt: "AI Exit Advisors",
+              className: "h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("p", { className: "text-sm text-muted font-light max-w-xs leading-relaxed", children: "Main Street Business Broker | $100K\u2013$10M Transactions" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start md:items-center text-sm font-medium tracking-widest uppercase gap-4 text-muted", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/", className: "hover:text-foreground transition-colors", children: "Home" }),
+          /* @__PURE__ */ jsx(Link, { to: "/about", className: "hover:text-foreground transition-colors", children: "About" }),
+          /* @__PURE__ */ jsx(Link, { to: "/contact", className: "hover:text-foreground transition-colors", children: "Contact" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start md:items-end text-sm text-muted font-light gap-4 md:text-right", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Email" }),
+            /* @__PURE__ */ jsx("a", { href: "mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry", className: "text-foreground hover:opacity-80 transition-opacity", children: "info@aiexitadvisors.com" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Phone" }),
+            /* @__PURE__ */ jsx("span", { className: "text-foreground", children: "+1 (725) 304-6728" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Location" }),
+            /* @__PURE__ */ jsx("span", { className: "text-foreground", children: "Las Vegas, Nevada, US" })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/5 text-xs text-muted/70 tracking-widest uppercase gap-4 text-center sm:text-left", children: [
+        /* @__PURE__ */ jsx("div", { children: "\xA9 2026 AI Exit Advisors." }),
+        /* @__PURE__ */ jsx("div", { children: "All rights reserved." })
+      ] })
+    ] }) })
+  ] });
+}
+
+// src/pages/Home.tsx
+import { motion as motion6, useScroll, useTransform } from "motion/react";
+import { LineChart, FileText, Handshake } from "lucide-react";
+import { Link as Link3 } from "react-router-dom";
+import { useRef } from "react";
+
+// src/components/ValuationEngine.tsx
+import { motion as motion3, AnimatePresence as AnimatePresence2 } from "motion/react";
+import { useState as useState2 } from "react";
+import { Link as Link2 } from "react-router-dom";
 
 // src/components/AnimatedDataFlow.tsx
 import { motion as motion2 } from "motion/react";
-import { Fragment, jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
 function AnimatedDataFlow() {
-  const isMobile = useIsMobile();
   return /* @__PURE__ */ jsxs2("div", { className: "absolute inset-0 z-0 overflow-hidden pointer-events-none select-none", children: [
     /* @__PURE__ */ jsx2("div", { className: "absolute inset-0 transition-colors duration-1000 bg-zinc-950" }),
     /* @__PURE__ */ jsx2(
       motion2.div,
       {
-        animate: isMobile ? { scale: 1, opacity: 0.4, x: "0%", y: "0%" } : {
+        animate: {
           scale: [1, 1.1, 1],
           opacity: [0.4, 0.6, 0.4],
           x: ["0%", "2%", "0%"],
@@ -52,7 +180,7 @@ function AnimatedDataFlow() {
     /* @__PURE__ */ jsx2(
       motion2.div,
       {
-        animate: isMobile ? { scale: 1, opacity: 0.3, x: "0%", y: "0%" } : {
+        animate: {
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
           x: ["0%", "-3%", "0%"],
@@ -65,7 +193,7 @@ function AnimatedDataFlow() {
     /* @__PURE__ */ jsx2("div", { className: "absolute inset-0 w-full h-full opacity-25 blur-xl pointer-events-none", children: /* @__PURE__ */ jsxs2(
       motion2.div,
       {
-        animate: isMobile ? { x: "0%" } : { x: ["0%", "-50%"] },
+        animate: { x: ["0%", "-50%"] },
         transition: { duration: 40, repeat: Infinity, ease: "linear" },
         className: "absolute inset-0 w-[200%] h-full flex",
         children: [
@@ -89,7 +217,7 @@ function AnimatedDataFlow() {
     /* @__PURE__ */ jsxs2(
       motion2.div,
       {
-        animate: isMobile ? { x: "0%" } : { x: ["0%", "-50%"] },
+        animate: { x: ["0%", "-50%"] },
         transition: { duration: 40, repeat: Infinity, ease: "linear" },
         className: "absolute inset-0 w-[200%] h-full flex opacity-60",
         children: [
@@ -99,44 +227,42 @@ function AnimatedDataFlow() {
             /* @__PURE__ */ jsx2("path", { d: "M0,800 C300,700 400,900 600,800 C800,700 900,850 1000,800", className: "stroke-amber-500/30", strokeWidth: "1", vectorEffect: "non-scaling-stroke" }),
             /* @__PURE__ */ jsx2("path", { d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200", className: "stroke-amber-300/20", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
             /* @__PURE__ */ jsx2("path", { d: "M0,500 C150,450 250,550 500,500 C750,450 850,550 1000,500", className: "stroke-amber-300/25", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
-            isMobile ? null : /* @__PURE__ */ jsxs2(Fragment, { children: [
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400",
-                  className: "stroke-amber-200",
-                  strokeWidth: "2",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "100 900",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 7, repeat: Infinity, ease: "linear" }
-                }
-              ),
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600",
-                  className: "stroke-amber-100",
-                  strokeWidth: "1.5",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "50 950",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 9, repeat: Infinity, ease: "linear", delay: 1 }
-                }
-              ),
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200",
-                  className: "stroke-amber-300",
-                  strokeWidth: "3",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "150 850",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 6, repeat: Infinity, ease: "linear", delay: 2 }
-                }
-              )
-            ] })
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400",
+                className: "stroke-amber-200",
+                strokeWidth: "2",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "100 900",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 7, repeat: Infinity, ease: "linear" }
+              }
+            ),
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600",
+                className: "stroke-amber-100",
+                strokeWidth: "1.5",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "50 950",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 9, repeat: Infinity, ease: "linear", delay: 1 }
+              }
+            ),
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200",
+                className: "stroke-amber-300",
+                strokeWidth: "3",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "150 850",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 6, repeat: Infinity, ease: "linear", delay: 2 }
+              }
+            )
           ] }),
           /* @__PURE__ */ jsxs2("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 1000", children: [
             /* @__PURE__ */ jsx2("path", { d: "M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400", className: "stroke-amber-400/40", strokeWidth: "1", vectorEffect: "non-scaling-stroke" }),
@@ -144,44 +270,42 @@ function AnimatedDataFlow() {
             /* @__PURE__ */ jsx2("path", { d: "M0,800 C300,700 400,900 600,800 C800,700 900,850 1000,800", className: "stroke-amber-500/30", strokeWidth: "1", vectorEffect: "non-scaling-stroke" }),
             /* @__PURE__ */ jsx2("path", { d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200", className: "stroke-amber-300/20", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
             /* @__PURE__ */ jsx2("path", { d: "M0,500 C150,450 250,550 500,500 C750,450 850,550 1000,500", className: "stroke-amber-300/25", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
-            isMobile ? null : /* @__PURE__ */ jsxs2(Fragment, { children: [
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400",
-                  className: "stroke-amber-200",
-                  strokeWidth: "2",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "100 900",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 7, repeat: Infinity, ease: "linear" }
-                }
-              ),
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600",
-                  className: "stroke-amber-100",
-                  strokeWidth: "1.5",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "50 950",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 9, repeat: Infinity, ease: "linear", delay: 1 }
-                }
-              ),
-              /* @__PURE__ */ jsx2(
-                motion2.path,
-                {
-                  d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200",
-                  className: "stroke-amber-300",
-                  strokeWidth: "3",
-                  vectorEffect: "non-scaling-stroke",
-                  strokeDasharray: "150 850",
-                  animate: { strokeDashoffset: [1e3, 0] },
-                  transition: { duration: 6, repeat: Infinity, ease: "linear", delay: 2 }
-                }
-              )
-            ] })
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,400 C200,300 300,500 500,450 C700,400 800,600 1000,400",
+                className: "stroke-amber-200",
+                strokeWidth: "2",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "100 900",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 7, repeat: Infinity, ease: "linear" }
+              }
+            ),
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,600 C250,700 350,450 550,550 C750,650 850,400 1000,600",
+                className: "stroke-amber-100",
+                strokeWidth: "1.5",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "50 950",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 9, repeat: Infinity, ease: "linear", delay: 1 }
+              }
+            ),
+            /* @__PURE__ */ jsx2(
+              motion2.path,
+              {
+                d: "M0,200 C300,100 400,300 600,200 C800,100 900,250 1000,200",
+                className: "stroke-amber-300",
+                strokeWidth: "3",
+                vectorEffect: "non-scaling-stroke",
+                strokeDasharray: "150 850",
+                animate: { strokeDashoffset: [1e3, 0] },
+                transition: { duration: 6, repeat: Infinity, ease: "linear", delay: 2 }
+              }
+            )
           ] })
         ]
       }
@@ -189,25 +313,16 @@ function AnimatedDataFlow() {
     /* @__PURE__ */ jsx2("div", { className: "absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(24,24,27,0.95)_80%)]" })
   ] });
 }
-var init_AnimatedDataFlow = __esm({
-  "src/components/AnimatedDataFlow.tsx"() {
-    init_useIsMobile();
-  }
-});
 
 // src/components/ValuationEngine.tsx
-import { motion as motion3, AnimatePresence as AnimatePresence2 } from "motion/react";
-import { useState as useState3 } from "react";
-import { Link as Link2 } from "react-router-dom";
 import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 function ValuationEngine() {
-  const isMobile = useIsMobile();
-  const [step, setStep] = useState3(1);
-  const [revenue, setRevenue] = useState3("");
-  const [profit, setProfit] = useState3("");
-  const [industry, setIndustry] = useState3("");
-  const [years, setYears] = useState3("");
-  const [valuationRange, setValuationRange] = useState3("");
+  const [step, setStep] = useState2(1);
+  const [revenue, setRevenue] = useState2("");
+  const [profit, setProfit] = useState2("");
+  const [industry, setIndustry] = useState2("");
+  const [years, setYears] = useState2("");
+  const [valuationRange, setValuationRange] = useState2("");
   const calculateValuation = () => {
     let base = 5e6;
     const cleanProfit = profit.replace(/[^0-9.]/g, "");
@@ -269,7 +384,7 @@ function ValuationEngine() {
             children: [
               /* @__PURE__ */ jsx3("p", { className: "text-lg md:text-xl text-muted font-light tracking-wide max-w-xl mx-auto", children: "Get a realistic valuation in minutes \u2014 before you leave money on the table." }),
               /* @__PURE__ */ jsxs3("div", { className: "flex items-center justify-center gap-3 text-xs uppercase tracking-widest text-foreground/80 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full w-max mx-auto", children: [
-                /* @__PURE__ */ jsx3("span", { className: `w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-80 ${isMobile ? "" : "animate-pulse"}` }),
+                /* @__PURE__ */ jsx3("span", { className: "w-1.5 h-1.5 rounded-full bg-emerald-500 opacity-80 animate-pulse" }),
                 "Serious buyers are actively acquiring right now."
               ] })
             ]
@@ -283,10 +398,7 @@ function ValuationEngine() {
             src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
             alt: "Texture",
             className: "w-full h-full object-cover mix-blend-overlay filter contrast-150 grayscale invert-0",
-            referrerPolicy: "no-referrer",
-            width: 1200,
-            height: 800,
-            loading: "lazy"
+            referrerPolicy: "no-referrer"
           }
         ) }),
         /* @__PURE__ */ jsx3("div", { className: "absolute top-0 left-0 w-full h-1 bg-white/5 z-10", children: /* @__PURE__ */ jsx3(
@@ -485,34 +597,27 @@ function ValuationEngine() {
     ] })
   ] });
 }
-var init_ValuationEngine = __esm({
-  "src/components/ValuationEngine.tsx"() {
-    init_AnimatedDataFlow();
-    init_useIsMobile();
-  }
-});
 
 // src/components/Animated.tsx
 import { motion as motion4 } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { jsx as jsx4 } from "react/jsx-runtime";
+var variants = {
+  fadeUp: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  },
+  fadeIn: {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 }
+  }
+};
 function Animated({ children, variant = "fadeUp", delay = 0, className = "", id }) {
-  const isMobile = useIsMobile();
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
     rootMargin: "0px 0px -50px 0px"
   });
-  const variants = {
-    fadeUp: {
-      hidden: { opacity: 0, y: isMobile ? 0 : 20 },
-      visible: { opacity: 1, y: 0 }
-    },
-    fadeIn: {
-      hidden: { opacity: 0 },
-      visible: { opacity: 1 }
-    }
-  };
   return /* @__PURE__ */ jsx4(
     motion4.div,
     {
@@ -521,26 +626,359 @@ function Animated({ children, variant = "fadeUp", delay = 0, className = "", id 
       initial: "hidden",
       animate: inView ? "visible" : "hidden",
       variants: variants[variant],
-      transition: { duration: isMobile ? 0.3 : 0.6, ease: [0.22, 1, 0.36, 1], delay: isMobile ? 0 : delay },
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
       className,
       children
     }
   );
 }
-var init_Animated = __esm({
-  "src/components/Animated.tsx"() {
-    init_useIsMobile();
+
+// src/components/AnimatedCapitalFlow.tsx
+import { motion as motion5 } from "motion/react";
+import { jsx as jsx5, jsxs as jsxs4 } from "react/jsx-runtime";
+function AnimatedCapitalFlow() {
+  return /* @__PURE__ */ jsxs4("div", { className: "absolute inset-0 z-0 overflow-hidden pointer-events-none select-none", children: [
+    /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 transition-colors duration-1000 bg-zinc-950" }),
+    /* @__PURE__ */ jsxs4("div", { className: "absolute inset-0 w-full h-full opacity-[0.22] pointer-events-none flex flex-col justify-end", children: [
+      /* @__PURE__ */ jsxs4(
+        motion5.div,
+        {
+          animate: { x: ["0%", "-50%"] },
+          transition: { duration: 30, repeat: Infinity, ease: "linear" },
+          className: "absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex blur-[10px]",
+          children: [
+            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
+              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-400", strokeWidth: "18", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-600", strokeWidth: "22", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-600", strokeWidth: "16", vectorEffect: "non-scaling-stroke" })
+            ] }),
+            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
+              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-400", strokeWidth: "18", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-600", strokeWidth: "22", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-600", strokeWidth: "16", vectorEffect: "non-scaling-stroke" })
+            ] })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs4(
+        motion5.div,
+        {
+          animate: { x: ["0%", "-50%"] },
+          transition: { duration: 30, repeat: Infinity, ease: "linear" },
+          className: "absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex opacity-[0.85]",
+          children: [
+            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
+              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-200", strokeWidth: "3", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-500", strokeWidth: "3.5", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-400", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,520 C300,580 450,400 600,460 C750,520 850,580 1000,520", className: "stroke-amber-300", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,100 C200,50 350,250 550,200 C750,150 850,100 1000,100", className: "stroke-amber-400", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" })
+            ] }),
+            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
+              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-200", strokeWidth: "3", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-500", strokeWidth: "3.5", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-400", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,520 C300,580 450,400 600,460 C750,520 850,580 1000,520", className: "stroke-amber-300", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
+              /* @__PURE__ */ jsx5("path", { d: "M0,100 C200,50 350,250 550,200 C750,150 850,100 1000,100", className: "stroke-amber-400", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" })
+            ] })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 bg-gradient-to-b from-zinc-950 via-transparent to-transparent opacity-90" })
+  ] });
+}
+
+// src/pages/Home.tsx
+import { jsx as jsx6, jsxs as jsxs5 } from "react/jsx-runtime";
+var fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+};
+var staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
   }
-});
+};
+function Home() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+  const yHero = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacityHero = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const yBgTexture = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const yBgGrid = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  return /* @__PURE__ */ jsxs5("div", { ref: containerRef, className: "w-full flex-col flex bg-background", children: [
+    /* @__PURE__ */ jsxs5("section", { className: "relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 pt-32 pb-24", children: [
+      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0", children: [
+        /* @__PURE__ */ jsx6(
+          "img",
+          {
+            src: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=2560&q=80",
+            alt: "Corporate Acquisition Meeting",
+            className: "w-full h-full object-cover opacity-20 filter contrast-125 brightness-50 mix-blend-luminosity blur-[2px]",
+            referrerPolicy: "no-referrer"
+          }
+        ),
+        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/40" }),
+        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" })
+      ] }),
+      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0 overflow-hidden pointer-events-none", children: [
+        /* @__PURE__ */ jsx6("div", { className: "absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-white/[0.03] rounded-full blur-[120px] mix-blend-screen" }),
+        /* @__PURE__ */ jsx6(
+          motion6.div,
+          {
+            style: { y: yBgTexture },
+            className: "absolute inset-0 w-full lg:w-[60%] opacity-[0.06] mix-blend-luminosity blur-[1px]",
+            children: /* @__PURE__ */ jsx6(
+              "img",
+              {
+                src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+                alt: "",
+                className: "w-full h-[150%] object-cover scale-110 grayscale",
+                referrerPolicy: "no-referrer"
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ jsx6(
+          motion6.div,
+          {
+            style: { y: yBgGrid },
+            className: "absolute top-[-10%] left-[-5%] w-full lg:w-[60%] h-[120%] opacity-[0.05]",
+            children: /* @__PURE__ */ jsxs5("svg", { viewBox: "0 0 1000 1000", className: "w-full h-full stroke-white fill-none", preserveAspectRatio: "none", children: [
+              /* @__PURE__ */ jsx6("path", { d: "M0,800 L200,600 C300,500 400,700 600,400 C700,250 800,300 1000,100", className: "stroke-[1.5]" }),
+              /* @__PURE__ */ jsx6("path", { d: "M0,850 L200,650 C300,550 400,750 600,450 C700,300 800,350 1000,150", className: "stroke-white/20" }),
+              Array.from({ length: 15 }).map((_, i) => /* @__PURE__ */ jsx6("line", { x1: "0", y1: i * 80, x2: "1000", y2: i * 80, className: "stroke-white/20 stroke-[0.5]" }, `h${i}`)),
+              Array.from({ length: 15 }).map((_, i) => /* @__PURE__ */ jsx6("line", { x1: i * 80, y1: "0", x2: i * 80, y2: "1000", className: "stroke-white/20 stroke-[0.5]" }, `v${i}`))
+            ] })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxs5("div", { className: "relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center", children: [
+        /* @__PURE__ */ jsxs5(
+          motion6.div,
+          {
+            style: { y: yHero, opacity: opacityHero },
+            className: "w-full text-left",
+            initial: "hidden",
+            animate: "visible",
+            variants: staggerContainer,
+            children: [
+              /* @__PURE__ */ jsx6(motion6.div, { variants: fadeUp, className: "mb-4 inline-block", children: /* @__PURE__ */ jsx6("span", { className: "px-3 py-1 rounded-full border border-white/10 text-xs font-mono uppercase tracking-widest text-muted", children: "Main Street Brokerage" }) }),
+              /* @__PURE__ */ jsxs5(
+                motion6.h1,
+                {
+                  variants: fadeUp,
+                  className: "text-5xl md:text-7xl lg:text-[5.5rem] leading-[1] tracking-tighter font-display font-medium text-foreground mb-6",
+                  children: [
+                    "Sell Your Business ",
+                    /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
+                    /* @__PURE__ */ jsx6("span", { className: "text-white/60", children: "the Right Way." })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsx6(
+                motion6.p,
+                {
+                  variants: fadeUp,
+                  className: "text-lg md:text-2xl text-muted font-light tracking-wide mb-12 max-w-xl leading-relaxed",
+                  children: "Main Street business brokerage for owners selling between $100K and $10M."
+                }
+              ),
+              /* @__PURE__ */ jsx6(motion6.div, { variants: fadeUp, className: "flex flex-col sm:flex-row items-center justify-start gap-4", children: /* @__PURE__ */ jsx6(Link3, { to: "/contact", className: "w-full sm:w-auto px-10 py-5 bg-foreground text-background text-sm tracking-widest uppercase font-medium rounded-full transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center shadow-[0_8px_30px_-4px_rgba(255,255,255,0.08)] hover:shadow-[0_12px_40px_-4px_rgba(255,255,255,0.12)]", children: "Get Free Valuation" }) })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs5(
+          motion6.div,
+          {
+            initial: { opacity: 0, x: 40 },
+            animate: { opacity: 1, x: 0 },
+            transition: { duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            className: "hidden lg:flex relative h-[600px] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
+            children: [
+              /* @__PURE__ */ jsx6(
+                "img",
+                {
+                  src: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80",
+                  alt: "Data and Strategy",
+                  className: "w-full h-full object-cover filter contrast-[1.1] brightness-[0.6] mix-blend-luminosity scale-105"
+                }
+              ),
+              /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent opacity-90" }),
+              /* @__PURE__ */ jsxs5("div", { className: "absolute bottom-10 left-10 right-10 p-8 bg-white/[0.04] backdrop-blur-[20px] rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)]", children: [
+                /* @__PURE__ */ jsxs5("div", { className: "flex justify-between items-end mb-4", children: [
+                  /* @__PURE__ */ jsxs5("div", { children: [
+                    /* @__PURE__ */ jsx6("div", { className: "text-xs font-mono uppercase tracking-widest text-muted mb-1", children: "Target Multiple" }),
+                    /* @__PURE__ */ jsx6("div", { className: "text-white text-lg font-mono", children: "4.5x \u2014 6.8x" })
+                  ] }),
+                  /* @__PURE__ */ jsxs5("div", { className: "text-right", children: [
+                    /* @__PURE__ */ jsx6("div", { className: "text-xs font-mono uppercase tracking-widest text-emerald-400 mb-1", children: "Data Depth" }),
+                    /* @__PURE__ */ jsx6("div", { className: "text-white font-mono text-sm", children: "High" })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsx6("div", { className: "w-full h-1 bg-white/10 rounded-full overflow-hidden", children: /* @__PURE__ */ jsx6(
+                  motion6.div,
+                  {
+                    initial: { width: "0%" },
+                    animate: { width: "75%" },
+                    transition: { duration: 1.5, delay: 0.8, ease: "easeOut" },
+                    className: "h-full bg-white opacity-80"
+                  }
+                ) })
+              ] })
+            ]
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx6("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 bg-background", children: /* @__PURE__ */ jsxs5("div", { className: "max-w-4xl mx-auto w-full text-center", children: [
+      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", children: /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter mb-8 text-foreground drop-shadow-sm", children: "Business Brokerage Services" }) }),
+      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.1, children: /* @__PURE__ */ jsxs5("div", { className: "space-y-6 text-lg md:text-xl text-muted font-light leading-relaxed", children: [
+        /* @__PURE__ */ jsxs5("p", { children: [
+          "When it\u2019s time to ",
+          /* @__PURE__ */ jsx6("strong", { children: "sell your business" }),
+          ", you need a process that protects your time and your confidentiality. As your ",
+          /* @__PURE__ */ jsx6("strong", { children: "business broker" }),
+          ", we handle the complex sourcing and negotiations, leaving you free to run your company."
+        ] }),
+        /* @__PURE__ */ jsxs5("p", { children: [
+          "Every successful ",
+          /* @__PURE__ */ jsx6("strong", { children: "small business sale" }),
+          " starts with an accurate pricing strategy. We perform a detailed ",
+          /* @__PURE__ */ jsx6("strong", { children: "business valuation" }),
+          " to ensure your business is positioned to attract the right buyers at the right price point."
+        ] })
+      ] }) })
+    ] }) }),
+    /* @__PURE__ */ jsx6(ValuationEngine, {}),
+    /* @__PURE__ */ jsx6("section", { className: "py-24 md:py-32 border-t border-white/5 px-6", children: /* @__PURE__ */ jsxs5("div", { className: "max-w-7xl mx-auto w-full", children: [
+      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", className: "mb-16 border-b border-white/10 pb-8", children: /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter", children: "Built for Serious Sellers." }) }),
+      /* @__PURE__ */ jsx6("div", { className: "grid md:grid-cols-3 gap-12 md:gap-6 divide-y md:divide-y-0 md:divide-x divide-white/10", children: [
+        { title: "Confidential process", desc: "Your identity and sensitive data are strictly protected throughout the entire timeline." },
+        { title: "Pre-qualified buyer network", desc: "Deal only with rigorous, vetted capital. We bypass the window shoppers." },
+        { title: "End-to-end deal execution", desc: "From packaging the asset to final contract structuring, we manage the close." }
+      ].map((stat, i) => /* @__PURE__ */ jsxs5(Animated, { delay: i * 0.15, variant: "fadeUp", className: "pt-8 md:pt-0 md:px-8 first:md:pl-0 last:md:pr-0", children: [
+        /* @__PURE__ */ jsxs5("h4", { className: "text-2xl md:text-3xl font-display tracking-tight mb-4", children: [
+          stat.title,
+          "."
+        ] }),
+        /* @__PURE__ */ jsx6("p", { className: "text-muted tracking-wide leading-relaxed font-light", children: stat.desc })
+      ] }, i)) })
+    ] }) }),
+    /* @__PURE__ */ jsxs5("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 relative overflow-hidden bg-background", children: [
+      /* @__PURE__ */ jsx6("div", { className: "absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.03)_0%,transparent_50%)] pointer-events-none" }),
+      /* @__PURE__ */ jsxs5("div", { className: "max-w-6xl mx-auto w-full relative z-10", children: [
+        /* @__PURE__ */ jsxs5(Animated, { variant: "fadeUp", className: "mb-24 text-center", children: [
+          /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter", children: "Our Process." }),
+          /* @__PURE__ */ jsx6("p", { className: "text-lg text-muted font-light mt-4", children: "Three deliberate steps to a successful exit." })
+        ] }),
+        /* @__PURE__ */ jsxs5("div", { className: "grid md:grid-cols-3 gap-16 md:gap-8 relative", children: [
+          /* @__PURE__ */ jsx6("div", { className: "hidden md:block absolute top-[40px] left-[16.66%] right-[16.66%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0" }),
+          [
+            { num: "01", title: "Valuation", text: "Get your business valued using live market multiples.", Icon: LineChart, hoverClass: "group-hover:scale-[1.15]" },
+            { num: "02", title: "Packaging", text: "We package your business for sale as a premium asset.", Icon: FileText, hoverClass: "group-hover:rotate-[-6deg] group-hover:scale-[1.1]" },
+            { num: "03", title: "Sale", text: "We match you with serious buyers and close the deal.", Icon: Handshake, hoverClass: "group-hover:-translate-y-1 group-hover:scale-[1.1]" }
+          ].map((step, i) => /* @__PURE__ */ jsxs5(
+            Animated,
+            {
+              delay: i * 0.15,
+              variant: "fadeUp",
+              className: "relative z-10 flex flex-col items-center text-center group",
+              children: [
+                /* @__PURE__ */ jsxs5("div", { className: "w-20 h-20 rounded-2xl bg-zinc-950/80 backdrop-blur-md border border-white/10 flex items-center justify-center mb-8 relative group-hover:border-white/30 transition-all duration-200 shadow-2xl", children: [
+                  /* @__PURE__ */ jsx6(step.Icon, { className: `w-8 h-8 text-white/50 group-hover:text-white transition-all duration-200 ${step.hoverClass}`, strokeWidth: 1 }),
+                  /* @__PURE__ */ jsx6("div", { className: "absolute -top-3 -right-3 text-[10px] font-mono border border-white/10 bg-zinc-900 px-2 py-0.5 rounded-full text-muted group-hover:text-white transition-colors duration-200", children: step.num })
+                ] }),
+                /* @__PURE__ */ jsx6("h3", { className: "text-2xl font-display tracking-tight text-foreground mb-4", children: step.title }),
+                /* @__PURE__ */ jsx6("p", { className: "text-muted tracking-wide leading-relaxed font-light text-sm md:text-base max-w-[250px]", children: step.text })
+              ]
+            },
+            i
+          ))
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs5("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 bg-zinc-950/20 relative overflow-hidden", children: [
+      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0 opacity-10 pointer-events-none", children: [
+        /* @__PURE__ */ jsx6(
+          "img",
+          {
+            src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2560&auto=format&fit=crop",
+            alt: "Corporate Desk",
+            className: "w-full h-full object-cover filter contrast-125 brightness-50 grayscale mix-blend-luminosity",
+            referrerPolicy: "no-referrer"
+          }
+        ),
+        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" })
+      ] }),
+      /* @__PURE__ */ jsxs5("div", { className: "max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center relative z-10", children: [
+        /* @__PURE__ */ jsxs5(Animated, { variant: "fadeUp", className: "flex flex-col", children: [
+          /* @__PURE__ */ jsxs5("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter mb-6", children: [
+            "We Prepare Your ",
+            /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
+            " Business for Sale."
+          ] }),
+          /* @__PURE__ */ jsx6("p", { className: "text-lg md:text-xl text-muted font-light tracking-wide max-w-md", children: "We turn your business into a buyer-ready asset." })
+        ] }),
+        /* @__PURE__ */ jsx6("div", { className: "flex flex-col gap-8", children: [
+          "Clean financial presentation",
+          "Clear growth story",
+          "Structured deal positioning"
+        ].map((point, i) => /* @__PURE__ */ jsxs5(
+          Animated,
+          {
+            delay: i * 0.1,
+            variant: "fadeUp",
+            className: "border-b border-white/10 pb-6 flex items-start gap-6 group hover:border-white/30 transition-colors",
+            children: [
+              /* @__PURE__ */ jsxs5("span", { className: "text-xs font-mono uppercase tracking-widest text-muted mt-2", children: [
+                "0",
+                i + 1
+              ] }),
+              /* @__PURE__ */ jsx6("span", { className: "text-2xl md:text-3xl font-display tracking-tight text-foreground", children: point })
+            ]
+          },
+          i
+        )) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs5("section", { className: "py-32 md:py-48 px-6 text-center border-t border-white/5 relative overflow-hidden", children: [
+      /* @__PURE__ */ jsx6(AnimatedCapitalFlow, {}),
+      /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.05)_0%,var(--color-background)_60%)] pointer-events-none" }),
+      /* @__PURE__ */ jsxs5("div", { className: "max-w-4xl mx-auto relative z-10 flex flex-col items-center", children: [
+        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", children: /* @__PURE__ */ jsxs5("h2", { className: "text-4xl md:text-7xl font-display tracking-tighter mb-6 text-foreground drop-shadow-sm", children: [
+          "Ready to Find Out ",
+          /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
+          " What It\u2019s Worth?"
+        ] }) }),
+        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.1, children: /* @__PURE__ */ jsx6("p", { className: "text-lg md:text-2xl text-muted font-light tracking-wide mb-12", children: "Start with a valuation. We'll handle the rest." }) }),
+        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.2, children: /* @__PURE__ */ jsx6("div", { className: "flex flex-col sm:flex-row items-center justify-center gap-4", children: /* @__PURE__ */ jsx6(
+          "button",
+          {
+            onClick: () => document.getElementById("valuation-engine")?.scrollIntoView({ behavior: "smooth" }),
+            className: "w-full sm:w-auto px-10 py-5 bg-white text-black text-sm tracking-widest uppercase font-medium rounded-full hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 flex items-center justify-center shadow-lg",
+            children: "Get Free Valuation"
+          }
+        ) }) })
+      ] })
+    ] })
+  ] });
+}
 
 // src/pages/About.tsx
-var About_exports = {};
-__export(About_exports, {
-  default: () => About
-});
 import { Link as Link4 } from "react-router-dom";
 import { TrendingUp, Users, Shield, Target, Building2, BarChart3, Lock, CheckCircle2 } from "lucide-react";
 import { jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
+var ownerImg = "/images/john.png";
+var certImg = "/images/certificate.png";
 function About() {
   return /* @__PURE__ */ jsxs6("div", { className: "w-full flex-1", children: [
     /* @__PURE__ */ jsxs6("section", { className: "relative pt-32 pb-24 md:pt-48 md:pb-32 px-6 overflow-hidden", children: [
@@ -648,12 +1086,9 @@ function About() {
         /* @__PURE__ */ jsx7("div", { className: "aspect-[4/5] relative z-10 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.03)] text-transparent rounded-xl", children: /* @__PURE__ */ jsx7(
           "img",
           {
-            src: "https://aiexitadvisors.com/images/john.webp",
+            src: ownerImg,
             alt: "Principal Advisor",
-            className: "w-full h-full object-cover rounded-xl shadow-lg",
-            loading: "lazy",
-            width: 400,
-            height: 500
+            className: "w-full h-full object-cover rounded-xl shadow-lg"
           }
         ) }),
         /* @__PURE__ */ jsx7("div", { className: "absolute -bottom-6 -left-6 w-full h-full border border-white/10 rounded-xl -z-10" })
@@ -693,12 +1128,9 @@ function About() {
           /* @__PURE__ */ jsx7(
             "img",
             {
-              src: "https://aiexitadvisors.com/images/certificate.webp",
+              src: certImg,
               alt: "Business Broker Certification",
-              className: "w-28 h-28 object-contain rounded-lg bg-white p-1.5 shrink-0 border border-black/5",
-              loading: "lazy",
-              width: 112,
-              height: 112
+              className: "w-28 h-28 object-contain rounded-lg bg-white p-1.5 shrink-0 border border-black/5"
             }
           ),
           /* @__PURE__ */ jsxs6("div", { children: [
@@ -754,17 +1186,8 @@ function About() {
     ] })
   ] });
 }
-var init_About = __esm({
-  "src/pages/About.tsx"() {
-    init_Animated();
-  }
-});
 
 // src/pages/Contact.tsx
-var Contact_exports = {};
-__export(Contact_exports, {
-  default: () => Contact
-});
 import { jsx as jsx8, jsxs as jsxs7 } from "react/jsx-runtime";
 function Contact() {
   return /* @__PURE__ */ jsx8("div", { className: "w-full flex-1 pt-32 pb-24 px-6 md:pt-40", children: /* @__PURE__ */ jsxs7("div", { className: "max-w-4xl mx-auto flex flex-col gap-24", children: [
@@ -840,543 +1263,16 @@ function Contact() {
     ] })
   ] }) });
 }
-var init_Contact = __esm({
-  "src/pages/Contact.tsx"() {
-    init_Animated();
-    init_ValuationEngine();
-  }
-});
-
-// scripts/prerender.ts
-import fs from "node:fs/promises";
-import path from "node:path";
-import React from "react";
-import { renderToString } from "react-dom/server";
-
-// src/App.tsx
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { StaticRouter } from "react-router";
-
-// src/components/Layout.tsx
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { useEffect as useEffect2, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-
-// src/components/SmoothScroll.tsx
-import Lenis from "@studio-freight/lenis";
-import { useEffect } from "react";
-function SmoothScroll() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.08,
-      // low lerp for smooth but responsive feel
-      smoothWheel: true,
-      wheelMultiplier: 1
-    });
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-  return null;
-}
-
-// src/lib/utils.ts
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
-
-// src/components/Layout.tsx
-import { jsx, jsxs } from "react/jsx-runtime";
-function Layout() {
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  useEffect2(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden", children: [
-    /* @__PURE__ */ jsxs("div", { className: "pointer-events-none fixed inset-0 z-0 overflow-hidden", children: [
-      /* @__PURE__ */ jsx("div", { className: "absolute top-[-10%] sm:top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-amber-500/5 blur-[100px] md:blur-[150px]" }),
-      /* @__PURE__ */ jsx("div", { className: "absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/5 blur-[100px] md:blur-[150px]" })
-    ] }),
-    /* @__PURE__ */ jsx(SmoothScroll, {}),
-    /* @__PURE__ */ jsx("header", { className: "fixed top-0 left-0 right-0 z-50 px-6 py-7 md:py-8 transition-all duration-300 bg-white/[0.04] backdrop-blur-[20px] border-b border-white/10", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10", children: [
-      /* @__PURE__ */ jsx(Link, { to: "/", className: "relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0", children: /* @__PURE__ */ jsx(
-        "img",
-        {
-          src: "https://aiexitadvisors.com/images/logo.webp",
-          alt: "AI Exit Advisors",
-          className: "h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md",
-          width: 250,
-          height: 64,
-          loading: "lazy"
-        }
-      ) }),
-      /* @__PURE__ */ jsxs("nav", { className: "hidden md:flex items-center gap-6 lg:gap-8 text-[11px] lg:text-xs uppercase tracking-widest font-medium", children: [
-        /* @__PURE__ */ jsx(Link, { to: "/", className: cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Home" }),
-        /* @__PURE__ */ jsx(Link, { to: "/about", className: cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground"), children: "About" }),
-        /* @__PURE__ */ jsx(Link, { to: "/contact", className: cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Contact" }),
-        /* @__PURE__ */ jsx(Link, { to: "/contact", className: "ml-2 px-8 py-3.5 bg-foreground text-background rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out shadow-[0_4px_20px_-4px_rgba(255,255,255,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(255,255,255,0.1)]", children: "Get Valuation" })
-      ] }),
-      /* @__PURE__ */ jsxs(
-        "button",
-        {
-          onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen),
-          className: "w-10 h-10 flex flex-col justify-center items-end gap-[5px] md:hidden relative z-50 p-2",
-          "aria-label": "Toggle Navigation",
-          children: [
-            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "rotate-45 translate-y-[6px]" : "") }),
-            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block transition-all duration-300", isMobileMenuOpen ? "opacity-0 translate-x-2" : "") }),
-            /* @__PURE__ */ jsx("span", { className: cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "-rotate-45 -translate-y-[6px]" : "") })
-          ]
-        }
-      )
-    ] }) }),
-    /* @__PURE__ */ jsx(AnimatePresence, { children: isMobileMenuOpen && /* @__PURE__ */ jsx(
-      motion.div,
-      {
-        initial: { opacity: 0, y: -20 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: -20 },
-        transition: { duration: 0.2 },
-        className: "fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl flex flex-col items-center justify-center md:hidden",
-        children: /* @__PURE__ */ jsxs("nav", { className: "flex flex-col items-center justify-center gap-8 text-sm uppercase tracking-widest font-medium w-full px-6", children: [
-          /* @__PURE__ */ jsx(Link, { to: "/", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Home" }),
-          /* @__PURE__ */ jsx(Link, { to: "/about", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground"), children: "About" }),
-          /* @__PURE__ */ jsx(Link, { to: "/contact", onClick: () => setIsMobileMenuOpen(false), className: cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground"), children: "Contact" }),
-          /* @__PURE__ */ jsx("div", { className: "w-8 h-px bg-white/10 my-2" }),
-          /* @__PURE__ */ jsx(Link, { to: "/contact", onClick: () => setIsMobileMenuOpen(false), className: "px-10 py-4 bg-foreground text-background text-center rounded-full hover:opacity-90 active:scale-95 transition-all w-full max-w-[280px]", children: "Get Valuation" })
-        ] })
-      }
-    ) }),
-    /* @__PURE__ */ jsx("main", { className: "flex-1 flex flex-col pt-24", children: /* @__PURE__ */ jsx(Outlet, {}) }),
-    /* @__PURE__ */ jsx("footer", { className: "border-t border-white/5 bg-zinc-950 px-6 pt-20 pb-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto", children: [
-      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start text-left", children: [
-          /* @__PURE__ */ jsx(Link, { to: "/", className: "mb-6 hover:opacity-80 transition-opacity inline-block", children: /* @__PURE__ */ jsx(
-            "img",
-            {
-              src: "https://aiexitadvisors.com/images/logo.webp",
-              alt: "AI Exit Advisors",
-              className: "h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md",
-              width: 150,
-              height: 40,
-              loading: "lazy"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("p", { className: "text-sm text-muted font-light max-w-xs leading-relaxed", children: "Main Street Business Broker | $100K\u2013$10M Transactions" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start md:items-center text-sm font-medium tracking-widest uppercase gap-4 text-muted", children: [
-          /* @__PURE__ */ jsx(Link, { to: "/", className: "hover:text-foreground transition-colors", children: "Home" }),
-          /* @__PURE__ */ jsx(Link, { to: "/about", className: "hover:text-foreground transition-colors", children: "About" }),
-          /* @__PURE__ */ jsx(Link, { to: "/contact", className: "hover:text-foreground transition-colors", children: "Contact" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start md:items-end text-sm text-muted font-light gap-4 md:text-right", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Email" }),
-            /* @__PURE__ */ jsx("a", { href: "mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry", className: "text-foreground hover:opacity-80 transition-opacity", children: "info@aiexitadvisors.com" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Phone" }),
-            /* @__PURE__ */ jsx("span", { className: "text-foreground", children: "+1 (725) 304-6728" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "block text-xs uppercase tracking-widest text-foreground/50 mb-1", children: "Location" }),
-            /* @__PURE__ */ jsx("span", { className: "text-foreground", children: "Las Vegas, Nevada, US" })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/5 text-xs text-muted/70 tracking-widest uppercase gap-4 text-center sm:text-left", children: [
-        /* @__PURE__ */ jsx("div", { children: "\xA9 2026 AI Exit Advisors." }),
-        /* @__PURE__ */ jsx("div", { children: "All rights reserved." })
-      ] })
-    ] }) })
-  ] });
-}
-
-// src/pages/Home.tsx
-init_ValuationEngine();
-init_Animated();
-import { motion as motion6, useScroll, useTransform } from "motion/react";
-import { LineChart, FileText, Handshake } from "lucide-react";
-import { Link as Link3 } from "react-router-dom";
-import { useRef } from "react";
-
-// src/components/AnimatedCapitalFlow.tsx
-init_useIsMobile();
-import { motion as motion5 } from "motion/react";
-import { jsx as jsx5, jsxs as jsxs4 } from "react/jsx-runtime";
-function AnimatedCapitalFlow() {
-  const isMobile = useIsMobile();
-  return /* @__PURE__ */ jsxs4("div", { className: "absolute inset-0 z-0 overflow-hidden pointer-events-none select-none", children: [
-    /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 transition-colors duration-1000 bg-zinc-950" }),
-    /* @__PURE__ */ jsxs4("div", { className: "absolute inset-0 w-full h-full opacity-[0.22] pointer-events-none flex flex-col justify-end", children: [
-      /* @__PURE__ */ jsxs4(
-        motion5.div,
-        {
-          animate: { x: isMobile ? "0%" : ["0%", "-50%"] },
-          transition: { duration: 30, repeat: Infinity, ease: "linear" },
-          className: "absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex blur-[10px]",
-          children: [
-            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
-              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-400", strokeWidth: "18", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-600", strokeWidth: "22", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-600", strokeWidth: "16", vectorEffect: "non-scaling-stroke" })
-            ] }),
-            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
-              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-400", strokeWidth: "18", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-600", strokeWidth: "22", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-600", strokeWidth: "16", vectorEffect: "non-scaling-stroke" })
-            ] })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxs4(
-        motion5.div,
-        {
-          animate: { x: isMobile ? "0%" : ["0%", "-50%"] },
-          transition: { duration: 30, repeat: Infinity, ease: "linear" },
-          className: "absolute inset-x-0 bottom-0 top-[20%] w-[200%] flex opacity-[0.85]",
-          children: [
-            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
-              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-200", strokeWidth: "3", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-500", strokeWidth: "3.5", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-400", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,520 C300,580 450,400 600,460 C750,520 850,580 1000,520", className: "stroke-amber-300", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,100 C200,50 350,250 550,200 C750,150 850,100 1000,100", className: "stroke-amber-400", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" })
-            ] }),
-            /* @__PURE__ */ jsxs4("svg", { fill: "none", className: "w-[50%] h-full", preserveAspectRatio: "none", viewBox: "0 0 1000 600", children: [
-              /* @__PURE__ */ jsx5("path", { d: "M0,300 C250,500 350,150 500,200 C650,250 750,450 1000,300", className: "stroke-amber-200", strokeWidth: "3", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,200 C300,100 400,300 600,250 C800,200 900,50 1000,200", className: "stroke-amber-500", strokeWidth: "3.5", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,450 C200,550 400,350 550,400 C700,450 850,550 1000,450", className: "stroke-yellow-400", strokeWidth: "2", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,520 C300,580 450,400 600,460 C750,520 850,580 1000,520", className: "stroke-amber-300", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" }),
-              /* @__PURE__ */ jsx5("path", { d: "M0,100 C200,50 350,250 550,200 C750,150 850,100 1000,100", className: "stroke-amber-400", strokeWidth: "1.5", vectorEffect: "non-scaling-stroke" })
-            ] })
-          ]
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 bg-gradient-to-b from-zinc-950 via-transparent to-transparent opacity-90" })
-  ] });
-}
-
-// src/pages/Home.tsx
-init_useIsMobile();
-import { jsx as jsx6, jsxs as jsxs5 } from "react/jsx-runtime";
-var staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-};
-function Home() {
-  const isMobile = useIsMobile();
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-  const yHero = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 200]);
-  const opacityHero = useTransform(scrollYProgress, [0, 0.5], [1, isMobile ? 1 : 0]);
-  const yBgTexture = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : 100]);
-  const yBgGrid = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : -80]);
-  const fadeUp = {
-    hidden: { opacity: 0, y: isMobile ? 0 : 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: isMobile ? 0.4 : 0.8, ease: [0.16, 1, 0.3, 1] } }
-  };
-  return /* @__PURE__ */ jsxs5("div", { ref: containerRef, className: "w-full flex-col flex bg-background", children: [
-    /* @__PURE__ */ jsxs5("section", { className: "relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 pt-32 pb-24", children: [
-      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0", children: [
-        /* @__PURE__ */ jsx6(
-          "img",
-          {
-            src: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=2560&q=80",
-            alt: "Corporate Acquisition Meeting",
-            className: "w-full h-full object-cover opacity-20 filter contrast-125 brightness-50 mix-blend-luminosity blur-[2px]",
-            referrerPolicy: "no-referrer",
-            width: 2560,
-            height: 1440,
-            loading: "lazy"
-          }
-        ),
-        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/40" }),
-        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" })
-      ] }),
-      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0 overflow-hidden pointer-events-none", children: [
-        /* @__PURE__ */ jsx6("div", { className: "absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-white/[0.03] rounded-full blur-[120px] mix-blend-screen" }),
-        /* @__PURE__ */ jsx6(
-          motion6.div,
-          {
-            style: { y: yBgTexture },
-            className: "absolute inset-0 w-full lg:w-[60%] opacity-[0.06] mix-blend-luminosity blur-[1px]",
-            children: /* @__PURE__ */ jsx6(
-              "img",
-              {
-                src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
-                alt: "",
-                className: "w-full h-[150%] object-cover scale-110 grayscale",
-                referrerPolicy: "no-referrer",
-                width: 1200,
-                height: 800,
-                loading: "lazy"
-              }
-            )
-          }
-        ),
-        /* @__PURE__ */ jsx6(
-          motion6.div,
-          {
-            style: { y: yBgGrid },
-            className: "absolute top-[-10%] left-[-5%] w-full lg:w-[60%] h-[120%] opacity-[0.05]",
-            children: /* @__PURE__ */ jsxs5("svg", { viewBox: "0 0 1000 1000", className: "w-full h-full stroke-white fill-none", preserveAspectRatio: "none", children: [
-              /* @__PURE__ */ jsx6("path", { d: "M0,800 L200,600 C300,500 400,700 600,400 C700,250 800,300 1000,100", className: "stroke-[1.5]" }),
-              /* @__PURE__ */ jsx6("path", { d: "M0,850 L200,650 C300,550 400,750 600,450 C700,300 800,350 1000,150", className: "stroke-white/20" }),
-              Array.from({ length: 15 }).map((_, i) => /* @__PURE__ */ jsx6("line", { x1: "0", y1: i * 80, x2: "1000", y2: i * 80, className: "stroke-white/20 stroke-[0.5]" }, `h${i}`)),
-              Array.from({ length: 15 }).map((_, i) => /* @__PURE__ */ jsx6("line", { x1: i * 80, y1: "0", x2: i * 80, y2: "1000", className: "stroke-white/20 stroke-[0.5]" }, `v${i}`))
-            ] })
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxs5("div", { className: "relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center", children: [
-        /* @__PURE__ */ jsxs5(
-          motion6.div,
-          {
-            style: { y: yHero, opacity: opacityHero },
-            className: "w-full text-left",
-            initial: "hidden",
-            animate: "visible",
-            variants: staggerContainer,
-            children: [
-              /* @__PURE__ */ jsx6(motion6.div, { variants: fadeUp, className: "mb-4 inline-block", children: /* @__PURE__ */ jsx6("span", { className: "px-3 py-1 rounded-full border border-white/10 text-xs font-mono uppercase tracking-widest text-muted", children: "Main Street Brokerage" }) }),
-              /* @__PURE__ */ jsxs5(
-                motion6.h1,
-                {
-                  variants: fadeUp,
-                  className: "text-5xl md:text-7xl lg:text-[5.5rem] leading-[1] tracking-tighter font-display font-medium text-foreground mb-6",
-                  children: [
-                    "Sell Your Business ",
-                    /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
-                    /* @__PURE__ */ jsx6("span", { className: "text-white/60", children: "the Right Way." })
-                  ]
-                }
-              ),
-              /* @__PURE__ */ jsx6(
-                motion6.p,
-                {
-                  variants: fadeUp,
-                  className: "text-lg md:text-2xl text-muted font-light tracking-wide mb-12 max-w-xl leading-relaxed",
-                  children: "Main Street business brokerage for owners selling between $100K and $10M."
-                }
-              ),
-              /* @__PURE__ */ jsx6(motion6.div, { variants: fadeUp, className: "flex flex-col sm:flex-row items-center justify-start gap-4", children: /* @__PURE__ */ jsx6(Link3, { to: "/contact", className: "w-full sm:w-auto px-10 py-5 bg-foreground text-background text-sm tracking-widest uppercase font-medium rounded-full transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center shadow-[0_8px_30px_-4px_rgba(255,255,255,0.08)] hover:shadow-[0_12px_40px_-4px_rgba(255,255,255,0.12)]", children: "Get Free Valuation" }) })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxs5(
-          motion6.div,
-          {
-            initial: isMobile ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 },
-            animate: { opacity: 1, x: 0 },
-            transition: isMobile ? { duration: 0 } : { duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
-            className: "hidden lg:flex relative h-[600px] w-full rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
-            children: [
-              /* @__PURE__ */ jsx6(
-                "img",
-                {
-                  src: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80",
-                  alt: "Data and Strategy",
-                  className: "w-full h-full object-cover filter contrast-[1.1] brightness-[0.6] mix-blend-luminosity scale-105",
-                  width: 1200,
-                  height: 800,
-                  loading: "lazy"
-                }
-              ),
-              /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent opacity-90" }),
-              /* @__PURE__ */ jsxs5("div", { className: "absolute bottom-10 left-10 right-10 p-8 bg-white/[0.04] backdrop-blur-[20px] rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)]", children: [
-                /* @__PURE__ */ jsxs5("div", { className: "flex justify-between items-end mb-4", children: [
-                  /* @__PURE__ */ jsxs5("div", { children: [
-                    /* @__PURE__ */ jsx6("div", { className: "text-xs font-mono uppercase tracking-widest text-muted mb-1", children: "Target Multiple" }),
-                    /* @__PURE__ */ jsx6("div", { className: "text-white text-lg font-mono", children: "4.5x \u2014 6.8x" })
-                  ] }),
-                  /* @__PURE__ */ jsxs5("div", { className: "text-right", children: [
-                    /* @__PURE__ */ jsx6("div", { className: "text-xs font-mono uppercase tracking-widest text-emerald-400 mb-1", children: "Data Depth" }),
-                    /* @__PURE__ */ jsx6("div", { className: "text-white font-mono text-sm", children: "High" })
-                  ] })
-                ] }),
-                /* @__PURE__ */ jsx6("div", { className: "w-full h-1 bg-white/10 rounded-full overflow-hidden", children: /* @__PURE__ */ jsx6(
-                  motion6.div,
-                  {
-                    initial: { width: isMobile ? "75%" : "0%" },
-                    animate: { width: "75%" },
-                    transition: { duration: 1.5, delay: 0.8, ease: "easeOut" },
-                    className: "h-full bg-white opacity-80"
-                  }
-                ) })
-              ] })
-            ]
-          }
-        )
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx6("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 bg-background", children: /* @__PURE__ */ jsxs5("div", { className: "max-w-4xl mx-auto w-full text-center", children: [
-      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", children: /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter mb-8 text-foreground drop-shadow-sm", children: "Business Brokerage Services" }) }),
-      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.1, children: /* @__PURE__ */ jsxs5("div", { className: "space-y-6 text-lg md:text-xl text-muted font-light leading-relaxed", children: [
-        /* @__PURE__ */ jsxs5("p", { children: [
-          "When it\u2019s time to ",
-          /* @__PURE__ */ jsx6("strong", { children: "sell your business" }),
-          ", you need a process that protects your time and your confidentiality. As your ",
-          /* @__PURE__ */ jsx6("strong", { children: "business broker" }),
-          ", we handle the complex sourcing and negotiations, leaving you free to run your company."
-        ] }),
-        /* @__PURE__ */ jsxs5("p", { children: [
-          "Every successful ",
-          /* @__PURE__ */ jsx6("strong", { children: "small business sale" }),
-          " starts with an accurate pricing strategy. We perform a detailed ",
-          /* @__PURE__ */ jsx6("strong", { children: "business valuation" }),
-          " to ensure your business is positioned to attract the right buyers at the right price point."
-        ] })
-      ] }) })
-    ] }) }),
-    /* @__PURE__ */ jsx6(ValuationEngine, {}),
-    /* @__PURE__ */ jsx6("section", { className: "py-24 md:py-32 border-t border-white/5 px-6", children: /* @__PURE__ */ jsxs5("div", { className: "max-w-7xl mx-auto w-full", children: [
-      /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", className: "mb-16 border-b border-white/10 pb-8", children: /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter", children: "Built for Serious Sellers." }) }),
-      /* @__PURE__ */ jsx6("div", { className: "grid md:grid-cols-3 gap-12 md:gap-6 divide-y md:divide-y-0 md:divide-x divide-white/10", children: [
-        { title: "Confidential process", desc: "Your identity and sensitive data are strictly protected throughout the entire timeline." },
-        { title: "Pre-qualified buyer network", desc: "Deal only with rigorous, vetted capital. We bypass the window shoppers." },
-        { title: "End-to-end deal execution", desc: "From packaging the asset to final contract structuring, we manage the close." }
-      ].map((stat, i) => /* @__PURE__ */ jsxs5(Animated, { delay: i * 0.15, variant: "fadeUp", className: "pt-8 md:pt-0 md:px-8 first:md:pl-0 last:md:pr-0", children: [
-        /* @__PURE__ */ jsxs5("h4", { className: "text-2xl md:text-3xl font-display tracking-tight mb-4", children: [
-          stat.title,
-          "."
-        ] }),
-        /* @__PURE__ */ jsx6("p", { className: "text-muted tracking-wide leading-relaxed font-light", children: stat.desc })
-      ] }, i)) })
-    ] }) }),
-    /* @__PURE__ */ jsxs5("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 relative overflow-hidden bg-background", children: [
-      /* @__PURE__ */ jsx6("div", { className: "absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.03)_0%,transparent_50%)] pointer-events-none" }),
-      /* @__PURE__ */ jsxs5("div", { className: "max-w-6xl mx-auto w-full relative z-10", children: [
-        /* @__PURE__ */ jsxs5(Animated, { variant: "fadeUp", className: "mb-24 text-center", children: [
-          /* @__PURE__ */ jsx6("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter", children: "Our Process." }),
-          /* @__PURE__ */ jsx6("p", { className: "text-lg text-muted font-light mt-4", children: "Three deliberate steps to a successful exit." })
-        ] }),
-        /* @__PURE__ */ jsxs5("div", { className: "grid md:grid-cols-3 gap-16 md:gap-8 relative", children: [
-          /* @__PURE__ */ jsx6("div", { className: "hidden md:block absolute top-[40px] left-[16.66%] right-[16.66%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0" }),
-          [
-            { num: "01", title: "Valuation", text: "Get your business valued using live market multiples.", Icon: LineChart, hoverClass: "group-hover:scale-[1.15]" },
-            { num: "02", title: "Packaging", text: "We package your business for sale as a premium asset.", Icon: FileText, hoverClass: "group-hover:rotate-[-6deg] group-hover:scale-[1.1]" },
-            { num: "03", title: "Sale", text: "We match you with serious buyers and close the deal.", Icon: Handshake, hoverClass: "group-hover:-translate-y-1 group-hover:scale-[1.1]" }
-          ].map((step, i) => /* @__PURE__ */ jsxs5(
-            Animated,
-            {
-              delay: i * 0.15,
-              variant: "fadeUp",
-              className: "relative z-10 flex flex-col items-center text-center group",
-              children: [
-                /* @__PURE__ */ jsxs5("div", { className: "w-20 h-20 rounded-2xl bg-zinc-950/80 backdrop-blur-md border border-white/10 flex items-center justify-center mb-8 relative group-hover:border-white/30 transition-all duration-200 shadow-2xl", children: [
-                  /* @__PURE__ */ jsx6(step.Icon, { className: `w-8 h-8 text-white/50 group-hover:text-white transition-all duration-200 ${step.hoverClass}`, strokeWidth: 1 }),
-                  /* @__PURE__ */ jsx6("div", { className: "absolute -top-3 -right-3 text-[10px] font-mono border border-white/10 bg-zinc-900 px-2 py-0.5 rounded-full text-muted group-hover:text-white transition-colors duration-200", children: step.num })
-                ] }),
-                /* @__PURE__ */ jsx6("h3", { className: "text-2xl font-display tracking-tight text-foreground mb-4", children: step.title }),
-                /* @__PURE__ */ jsx6("p", { className: "text-muted tracking-wide leading-relaxed font-light text-sm md:text-base max-w-[250px]", children: step.text })
-              ]
-            },
-            i
-          ))
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs5("section", { className: "py-24 md:py-32 px-6 border-t border-white/5 bg-zinc-950/20 relative overflow-hidden", children: [
-      /* @__PURE__ */ jsxs5("div", { className: "absolute inset-0 z-0 opacity-10 pointer-events-none", children: [
-        /* @__PURE__ */ jsx6(
-          "img",
-          {
-            src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2560&auto=format&fit=crop",
-            alt: "Corporate Desk",
-            className: "w-full h-full object-cover filter contrast-125 brightness-50 grayscale mix-blend-luminosity",
-            referrerPolicy: "no-referrer",
-            width: 2560,
-            height: 1440,
-            loading: "lazy"
-          }
-        ),
-        /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" })
-      ] }),
-      /* @__PURE__ */ jsxs5("div", { className: "max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center relative z-10", children: [
-        /* @__PURE__ */ jsxs5(Animated, { variant: "fadeUp", className: "flex flex-col", children: [
-          /* @__PURE__ */ jsxs5("h2", { className: "text-3xl md:text-5xl font-display tracking-tighter mb-6", children: [
-            "We Prepare Your ",
-            /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
-            " Business for Sale."
-          ] }),
-          /* @__PURE__ */ jsx6("p", { className: "text-lg md:text-xl text-muted font-light tracking-wide max-w-md", children: "We turn your business into a buyer-ready asset." })
-        ] }),
-        /* @__PURE__ */ jsx6("div", { className: "flex flex-col gap-8", children: [
-          "Clean financial presentation",
-          "Clear growth story",
-          "Structured deal positioning"
-        ].map((point, i) => /* @__PURE__ */ jsxs5(
-          Animated,
-          {
-            delay: i * 0.1,
-            variant: "fadeUp",
-            className: "border-b border-white/10 pb-6 flex items-start gap-6 group hover:border-white/30 transition-colors",
-            children: [
-              /* @__PURE__ */ jsxs5("span", { className: "text-xs font-mono uppercase tracking-widest text-muted mt-2", children: [
-                "0",
-                i + 1
-              ] }),
-              /* @__PURE__ */ jsx6("span", { className: "text-2xl md:text-3xl font-display tracking-tight text-foreground", children: point })
-            ]
-          },
-          i
-        )) })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs5("section", { className: "py-32 md:py-48 px-6 text-center border-t border-white/5 relative overflow-hidden", children: [
-      /* @__PURE__ */ jsx6(AnimatedCapitalFlow, {}),
-      /* @__PURE__ */ jsx6("div", { className: "absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.05)_0%,var(--color-background)_60%)] pointer-events-none" }),
-      /* @__PURE__ */ jsxs5("div", { className: "max-w-4xl mx-auto relative z-10 flex flex-col items-center", children: [
-        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", children: /* @__PURE__ */ jsxs5("h2", { className: "text-4xl md:text-7xl font-display tracking-tighter mb-6 text-foreground drop-shadow-sm", children: [
-          "Ready to Find Out ",
-          /* @__PURE__ */ jsx6("br", { className: "hidden md:block" }),
-          " What It\u2019s Worth?"
-        ] }) }),
-        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.1, children: /* @__PURE__ */ jsx6("p", { className: "text-lg md:text-2xl text-muted font-light tracking-wide mb-12", children: "Start with a valuation. We'll handle the rest." }) }),
-        /* @__PURE__ */ jsx6(Animated, { variant: "fadeUp", delay: 0.2, children: /* @__PURE__ */ jsx6("div", { className: "flex flex-col sm:flex-row items-center justify-center gap-4", children: /* @__PURE__ */ jsx6(
-          "button",
-          {
-            onClick: () => document.getElementById("valuation-engine")?.scrollIntoView({ behavior: "smooth" }),
-            className: "w-full sm:w-auto px-10 py-5 bg-white text-black text-sm tracking-widest uppercase font-medium rounded-full hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 flex items-center justify-center shadow-lg",
-            children: "Get Free Valuation"
-          }
-        ) }) })
-      ] })
-    ] })
-  ] });
-}
 
 // src/App.tsx
 import { jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
-var About2 = lazy(() => Promise.resolve().then(() => (init_About(), About_exports)));
-var Contact2 = lazy(() => Promise.resolve().then(() => (init_Contact(), Contact_exports)));
 function App({ url }) {
   const isServer = typeof window === "undefined";
-  const content = /* @__PURE__ */ jsx9(Suspense, { fallback: /* @__PURE__ */ jsx9("div", { className: "min-h-screen bg-background flex justify-center items-center", children: "Loading..." }), children: /* @__PURE__ */ jsx9(Routes, { children: /* @__PURE__ */ jsxs8(Route, { path: "/", element: /* @__PURE__ */ jsx9(Layout, {}), children: [
+  const content = /* @__PURE__ */ jsx9(Routes, { children: /* @__PURE__ */ jsxs8(Route, { path: "/", element: /* @__PURE__ */ jsx9(Layout, {}), children: [
     /* @__PURE__ */ jsx9(Route, { index: true, element: /* @__PURE__ */ jsx9(Home, {}) }),
-    /* @__PURE__ */ jsx9(Route, { path: "about", element: /* @__PURE__ */ jsx9(About2, {}) }),
-    /* @__PURE__ */ jsx9(Route, { path: "contact", element: /* @__PURE__ */ jsx9(Contact2, {}) })
-  ] }) }) });
+    /* @__PURE__ */ jsx9(Route, { path: "about", element: /* @__PURE__ */ jsx9(About, {}) }),
+    /* @__PURE__ */ jsx9(Route, { path: "contact", element: /* @__PURE__ */ jsx9(Contact, {}) })
+  ] }) });
   if (isServer && url) {
     return /* @__PURE__ */ jsx9(StaticRouter, { location: url, children: content });
   }

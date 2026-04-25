@@ -1,8 +1,8 @@
 import Animated from "../components/Animated";
 import { Link } from "react-router-dom";
 import { TrendingUp, Users, Shield, Target, Building2, BarChart3, Fingerprint, Lock, CheckCircle2, Award } from "lucide-react";
-import ownerImg from "../assets/images/john.png";
-import certImg from "../assets/images/certificate.png";
+const ownerImg = "/images/john.png";
+const certImg = "/images/certificate.png";
 
 export default function About() {
   return (

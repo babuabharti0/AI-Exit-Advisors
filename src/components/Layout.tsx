@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import SmoothScroll from "./SmoothScroll";
 import { cn } from "../lib/utils";
-import logo from "../assets/images/logo.png";
+const logo = "/images/logo.png";
 
 export default function Layout() {
   const location = useLocation();

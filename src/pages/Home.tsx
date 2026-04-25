@@ -158,6 +158,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 1.5. Business Brokerage Services */}
+      <section className="py-24 md:py-32 px-6 border-t border-white/5 bg-background">
+        <div className="max-w-4xl mx-auto w-full text-center">
+          <Animated variant="fadeUp">
+            <h2 className="text-3xl md:text-5xl font-display tracking-tighter mb-8 text-foreground drop-shadow-sm">
+              Business Brokerage Services
+            </h2>
+          </Animated>
+          <Animated variant="fadeUp" delay={0.1}>
+            <div className="space-y-6 text-lg md:text-xl text-muted font-light leading-relaxed">
+              <p>
+                When it’s time to <strong>sell your business</strong>, you need a process that protects your time and your confidentiality. As your <strong>business broker</strong>, we handle the complex sourcing and negotiations, leaving you free to run your company.
+              </p>
+              <p>
+                Every successful <strong>small business sale</strong> starts with an accurate pricing strategy. We perform a detailed <strong>business valuation</strong> to ensure your business is positioned to attract the right buyers at the right price point.
+              </p>
+            </div>
+          </Animated>
+        </div>
+      </section>
+
       <ValuationEngine />
 
       {/* 3. Trust Section */}

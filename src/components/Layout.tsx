@@ -107,7 +107,7 @@ export default function Layout() {
                 <img 
                   src={logo} 
                   alt="AI Exit Advisors" 
-                  className="h-10 w-auto object-contain bg-white/95 p-1.5 rounded-md"
+                  className="h-20 w-auto object-contain bg-white/95 p-3 rounded-lg"
                 />
               </Link>
               <p className="text-sm text-muted font-light max-w-xs leading-relaxed">
@@ -130,7 +130,8 @@ export default function Layout() {
               </div>
               <div>
                 <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Phone</span>
-                <span className="text-foreground">+1 (725) 304-6728</span>
+                <a href="tel:+17253046728" className="block text-foreground hover:opacity-80 transition-opacity mb-1.5">+1 (725) 304-6728</a>
+                <a href="tel:+15126491177" className="block text-foreground hover:opacity-80 transition-opacity">+1 512-649-1177</a>
               </div>
               <div>
                 <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Location</span>

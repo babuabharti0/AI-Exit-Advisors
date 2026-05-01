@@ -134,7 +134,8 @@ export default function Layout() {
               </div>
               <div>
                 <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Location</span>
-                <span className="text-foreground">Las Vegas, Nevada, US</span>
+                <span className="text-foreground">1106 Clayton Lane Suite 500W PMB 1010 Austin, TX 78723
+</span>
               </div>
             </div>
 

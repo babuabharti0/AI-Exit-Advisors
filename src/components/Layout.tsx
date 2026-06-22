@@ -23,28 +23,29 @@ export default function Layout() {
       </div>
 
       <SmoothScroll />
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 py-7 md:py-8 transition-all duration-300 bg-white/[0.04] backdrop-blur-[20px] border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10">
-          <Link to="/" className="relative z-50 hover:opacity-80 transition-opacity flex items-center shrink-0">
+      <header className="fixed top-0 left-0 right-0 z-50 px-6 h-[64px] md:h-[70px] lg:h-[80px] flex items-center transition-all duration-300 bg-[#AEB4BC] border-b border-black/5">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10">
+          <Link to="/" className="relative z-50 hover:opacity-80 transition-opacity flex items-center">
             <img 
               src={logo} 
               alt="AI Exit Advisors" 
-              className="h-14 md:h-16 w-auto object-contain bg-white/95 p-1.5 rounded-md"
+              className="h-[112px] md:h-[124px] lg:h-[144px] w-auto object-contain max-w-none"
+              style={{ margin: "-30px 0" }}
             />
           </Link>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[11px] lg:text-xs uppercase tracking-widest font-medium">
-            <Link to="/" className={cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground")}>
+            <Link to="/" className={cn("transition-colors", location.pathname === "/" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
               Home
             </Link>
-            <Link to="/about" className={cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground")}>
+            <Link to="/about" className={cn("transition-colors", location.pathname === "/about" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
               About
             </Link>
-            <Link to="/contact" className={cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground")}>
+            <Link to="/contact" className={cn("transition-colors", location.pathname === "/contact" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
               Contact
             </Link>
-            <Link to="/contact" className="ml-2 px-8 py-3.5 bg-foreground text-background rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out shadow-[0_4px_20px_-4px_rgba(255,255,255,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(255,255,255,0.1)]">
+            <Link to="/contact" className="ml-2 px-8 py-3.5 bg-[#0B1F3A] text-white rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ease-out shadow-md hover:shadow-lg">
               Get Valuation
             </Link>
           </nav>
@@ -55,9 +56,9 @@ export default function Layout() {
             className="w-10 h-10 flex flex-col justify-center items-end gap-[5px] md:hidden relative z-50 p-2"
             aria-label="Toggle Navigation"
           >
-            <span className={cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "rotate-45 translate-y-[6px]" : "")}></span>
-            <span className={cn("w-full h-[1px] bg-foreground block transition-all duration-300", isMobileMenuOpen ? "opacity-0 translate-x-2" : "")}></span>
-            <span className={cn("w-full h-[1px] bg-foreground block origin-center transition-all duration-300", isMobileMenuOpen ? "-rotate-45 -translate-y-[6px]" : "")}></span>
+            <span className={cn("w-full h-[1px] bg-[#0B1F3A] block origin-center transition-all duration-300", isMobileMenuOpen ? "rotate-45 translate-y-[6px]" : "")}></span>
+            <span className={cn("w-full h-[1px] bg-[#0B1F3A] block transition-all duration-300", isMobileMenuOpen ? "opacity-0 translate-x-2" : "")}></span>
+            <span className={cn("w-full h-[1px] bg-[#0B1F3A] block origin-center transition-all duration-300", isMobileMenuOpen ? "-rotate-45 -translate-y-[6px]" : "")}></span>
           </button>
         </div>
       </header>
@@ -70,22 +71,22 @@ export default function Layout() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl flex flex-col items-center justify-center md:hidden"
+            className="fixed inset-0 z-40 bg-[#AEB4BC] flex flex-col items-center justify-center md:hidden"
           >
-            <nav className="flex flex-col items-center justify-center gap-8 text-sm uppercase tracking-widest font-medium w-full px-6">
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/" ? "text-foreground" : "text-muted hover:text-foreground")}>
+            <nav className="flex flex-col items-center justify-center gap-8 text-sm uppercase tracking-widest font-medium w-full px-6 text-[#0B1F3A]">
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
                 Home
               </Link>
-              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/about" ? "text-foreground" : "text-muted hover:text-foreground")}>
+              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/about" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
                 About
               </Link>
-              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/contact" ? "text-foreground" : "text-muted hover:text-foreground")}>
+              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={cn("transition-colors", location.pathname === "/contact" ? "text-[#0B1F3A]" : "text-[#0B1F3A]/70 hover:text-[#0B1F3A]")}>
                 Contact
               </Link>
               
-              <div className="w-8 h-px bg-white/10 my-2" />
+              <div className="w-8 h-px bg-black/10 my-2" />
               
-              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="px-10 py-4 bg-foreground text-background text-center rounded-full hover:opacity-90 active:scale-95 transition-all w-full max-w-[280px]">
+              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="px-10 py-4 bg-[#0B1F3A] text-white text-center rounded-full hover:opacity-90 active:scale-95 transition-all w-full max-w-[280px]">
                 Get Valuation
               </Link>
             </nav>
@@ -93,13 +94,13 @@ export default function Layout() {
         )}
       </AnimatePresence>
 
-      <main className="flex-1 flex flex-col pt-24">
+      <main className="flex-1 flex flex-col pt-[64px] md:pt-[70px] lg:pt-[80px]">
         <Outlet />
       </main>
 
-      <footer className="border-t border-white/5 bg-zinc-950 px-6 pt-20 pb-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
+      <footer className="border-t border-black/5 bg-[#AEB4BC] px-6 pt-12 pb-8">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
             
             {/* Left Section */}
             <div className="flex flex-col items-start text-left">
@@ -107,34 +108,35 @@ export default function Layout() {
                 <img 
                   src={logo} 
                   alt="AI Exit Advisors" 
-                  className="h-20 w-auto object-contain bg-white/95 p-3 rounded-lg"
+                  className="h-[250px] md:h-[300px] lg:h-[360px] w-auto object-contain max-w-none"
+                  style={{ margin: "-50px 0" }}
                 />
               </Link>
-              <p className="text-sm text-muted font-light max-w-xs leading-relaxed">
+              <p className="text-sm text-[#0B1F3A]/70 font-light max-w-xs leading-relaxed">
                 Main Street Business Broker | $100K–$10M Transactions
               </p>
             </div>
 
             {/* Middle Section (Nav Links) */}
-            <div className="flex flex-col items-start md:items-center text-sm font-medium tracking-widest uppercase gap-4 text-muted">
-              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-              <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+            <div className="flex flex-col items-start md:items-center text-sm font-medium tracking-widest uppercase gap-4 text-[#0B1F3A]/70">
+              <Link to="/" className="hover:text-[#0B1F3A] transition-colors">Home</Link>
+              <Link to="/about" className="hover:text-[#0B1F3A] transition-colors">About</Link>
+              <Link to="/contact" className="hover:text-[#0B1F3A] transition-colors">Contact</Link>
             </div>
 
             {/* Right Section (Contact Placeholder) */}
-            <div className="flex flex-col items-start md:items-end text-sm text-muted font-light gap-4 md:text-right">
+            <div className="flex flex-col items-start md:items-end text-sm text-[#0B1F3A]/70 font-light gap-4 md:text-right">
               <div>
-                <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Email</span>
-                <a href="mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry" className="text-foreground hover:opacity-80 transition-opacity">info@aiexitadvisors.com</a>
+                <span className="block text-xs uppercase tracking-widest text-[#0B1F3A]/50 mb-1">Email</span>
+                <a href="mailto:info@aiexitadvisors.com?subject=Business%20Valuation%20Inquiry" className="text-[#0B1F3A] hover:opacity-80 transition-opacity">info@aiexitadvisors.com</a>
               </div>
               <div>
-                <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Phone</span>
-                <a href="tel:+15126491177" className="text-foreground hover:opacity-80 transition-opacity">+1 512-649-1177</a>
+                <span className="block text-xs uppercase tracking-widest text-[#0B1F3A]/50 mb-1">Phone</span>
+                <a href="tel:+15126491177" className="text-[#0B1F3A] hover:opacity-80 transition-opacity">+1 512-649-1177</a>
               </div>
               <div>
-                <span className="block text-xs uppercase tracking-widest text-foreground/50 mb-1">Location</span>
-                <span className="text-foreground">1106 Clayton Lane Suite 500W PMB 1010 Austin, TX 78723
+                <span className="block text-xs uppercase tracking-widest text-[#0B1F3A]/50 mb-1">Location</span>
+                <span className="text-[#0B1F3A]">1106 Clayton Lane Suite 500W PMB 1010 Austin, TX 78723
 </span>
               </div>
             </div>
@@ -142,7 +144,7 @@ export default function Layout() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/5 text-xs text-muted/70 tracking-widest uppercase gap-4 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-black/5 text-xs text-[#0B1F3A]/50 tracking-widest uppercase gap-4 text-center sm:text-left">
             <div>&copy; 2026 AI Exit Advisors.</div>
             <div>All rights reserved.</div>
           </div>
